@@ -1,4 +1,5 @@
-const express = require("express");
+import express from 'express'
+import userRoutes from './routes/user.routes.js'
 
 const app = express();
 
@@ -12,7 +13,7 @@ app.get("/health", function(req,res){
 
 //endpoints agrupados
 
-app.use("/users", require("./routes/user.routes.js"))
+app.use("/users", userRoutes)
 
 
 app.listen(3000, function () {

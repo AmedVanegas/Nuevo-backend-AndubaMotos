@@ -26,7 +26,7 @@ function deleteUsers(req,res){
 
 
 
-module.exports ={
+export {
     getUsers, createUsers, deleteUsers,patchUsers
 }
 
