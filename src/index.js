@@ -9,6 +9,12 @@ app.get("/health", function(req,res){
     })
 })
 
+
+//endpoints agrupados
+
+app.use("/users", require("./routes/user.routes.js"))
+
+
 app.listen(3000, function () {
   console.log("server runng on http://localhost:3000");
 });
