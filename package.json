@@ -1,0 +1,17 @@
+{
+  "name": "backend_andubamotos",
+  "version": "1.0.0",
+  "description": "backend para Ecommerce de partes de motos y parte de administracion",
+  "license": "ISC",
+  "author": "Amed Vanegas <amedvanegas368@gmail.com>",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "contributors": [
+    "Jose Duarte Baez <bmwcasivuela@hotmail.com>"
+  ]
+
+}
