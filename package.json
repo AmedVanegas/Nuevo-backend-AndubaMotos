@@ -7,11 +7,13 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node --watch /src/index.js"
   },
   "keywords": [],
   "contributors": [
     "Jose Duarte Baez <bmwcasivuela@hotmail.com>"
-  ]
-
+  ],
+  "dependencies": {
+    "express": "^5.2.1"
+  }
 }
