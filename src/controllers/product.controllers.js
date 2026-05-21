@@ -22,6 +22,4 @@ const deleteProducts = (req,res)=>{
     });
 };
 
-
-
 export  {getProducts,pacthProducts,postProducts,deleteProducts}
