@@ -1,7 +1,14 @@
 import express from 'express'
+
+import dbConnection from './config/mongo.config.js';
+
 import userRoutes from './routes/user.routes.js'
 
 const app = express();
+
+//coneccion a la base de datos
+
+dbConnection()
 
 app.get("/health", function(req,res){
 
