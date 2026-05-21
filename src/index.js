@@ -3,6 +3,7 @@ import express from 'express'
 import dbConnection from './config/mongo.config.js';
 
 import userRoutes from './routes/user.routes.js'
+import productsRoutes from './routes/product.routes.js';
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.get("/health", function(req,res){
 //endpoints agrupados
 
 app.use("/users", userRoutes)
+app.use('/products', productsRoutes);
 
 
 app.listen(3000, function () {
