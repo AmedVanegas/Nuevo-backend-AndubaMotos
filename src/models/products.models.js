@@ -39,7 +39,7 @@ const productSchema = new Schema(
   },
   {
     versionKey:false,
-    timestapms:true
+    timestamps:true
   },
 );
 
