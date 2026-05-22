@@ -30,7 +30,7 @@ const UserSchema = new Schema(
     },
     rol: {
       type: String,
-      enum: ["client", "admin", "seller"],
+      enum: ["client", "admin", "seller","owner"],
       default: "client",
     },
     address: {
@@ -66,7 +66,9 @@ const UserSchema = new Schema(
     
   },
   {
+    versionKey:false,
     timestamps:true
+    
     
   },
 );
