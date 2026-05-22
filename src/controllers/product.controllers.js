@@ -1,3 +1,5 @@
+import productModel from "../models/products.models.js";
+
 const getProducts = (req,res)=>{
     res.json({
         msg: 'listar productos'
@@ -9,9 +11,15 @@ const pacthProducts = (req,res)=>{
     });
 };
 
-const postProducts = (req,res)=>{
-    res.json({
-        msg: 'crea los productos'
+const postProducts = async(req,res)=>{
+
+    const inputData = req.body; // obtiene los datos enviados en la peticion
+
+    const data = await productModel.create(inputData)  // registra usando el modelo y guarda la respuesta en la constante data
+
+    res.json({                        // respondemos al clientre enviando los datos registrados
+        msg: 'crea los productos',
+        inputData:inputData
     });
 };
 

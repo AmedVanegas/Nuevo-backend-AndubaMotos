@@ -3,7 +3,9 @@ import mongoose from "mongoose";
 
 const localConnection = 'mongodb://127.0.0.1/my_database'
 
-const remoteConnection = 'mongodb+srv://AmedVR:PeDHxm673IYEZD9s@cluster0.tpczf4c.mongodb.net/'
+const remoteConnection = 'mongodb+srv://AmedVR:ELVgOZuOwqSSr43s@cluster0.tpczf4c.mongodb.net/db-motos'
+
+
 
 
 async function dbConnection (){
