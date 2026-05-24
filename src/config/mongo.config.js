@@ -9,7 +9,7 @@ const remoteConnection = 'mongodb+srv://AmedVR:PeDHxm673IYEZD9s@cluster0.tpczf4c
 async function dbConnection (){
     
     try {
-        await mongoose.connect(remoteConnection)
+        await mongoose.connect(localConnection)
         console.log('connected')
         
     } catch (error) {
