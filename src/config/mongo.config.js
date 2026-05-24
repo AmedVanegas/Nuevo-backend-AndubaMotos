@@ -1,7 +1,7 @@
 
 import mongoose from "mongoose";
 
-const localConnection = 'mongodb://127.0.0.1/my_database'
+const localConnection = 'mongodb://127.0.0.1/Ecommerce'
 
 const remoteConnection = 'mongodb+srv://AmedVR:PeDHxm673IYEZD9s@cluster0.tpczf4c.mongodb.net/'
 
