@@ -60,7 +60,7 @@ const UserSchema = new Schema(
     status:{
         enum:['active','inactive','banned'],
         type:String,
-        deafult:'active'
+        default:'active'
     }
 
     
