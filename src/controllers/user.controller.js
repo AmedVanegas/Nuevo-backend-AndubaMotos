@@ -1,9 +1,19 @@
-import { insertUser } from "../services/user.service.js";
+import { dbGetUsers, insertUser } from "../services/user.service.js";
 
-function getUsers(req, res) {
-  res.json({
-    msg: "listar todos los usuarios",
-  });
+async function getUsers(req, res) {
+  try {
+    const data = await dbGetUsers();
+
+    res.json({
+      msg: "lista de todos los usuarios",
+      data: data,
+    });
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      msg:"No se pudo obtener los usuarios"
+    })
+  }
 }
 
 function patchUsers(req, res) {

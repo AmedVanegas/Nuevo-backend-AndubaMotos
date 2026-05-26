@@ -7,6 +7,14 @@ const insertUser = async (newUser)=> {
 }
 
 
+const dbGetUsers = async ()=> {
+
+    return await Usermodel.find()
+
+
+}
+
+
 export{
-    insertUser
+    insertUser, dbGetUsers
 }
