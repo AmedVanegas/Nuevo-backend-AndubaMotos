@@ -4,38 +4,29 @@ import { Schema, model } from "mongoose";
 
 const serviceSchema = new Schema(
   {
-    name: {
+      name: {
       type: String,
-      required: true,
+      required: true, 
       trim: true,
+      minlength: 3, 
+      maxlength: 100, 
     },
-    nr:{
-      type: String,
-      required: true
-    },
-
-    description: String,
     price: {
       type: Number,
-      default: 0,
-      min: 0,
+      min: 0, 
+      default: 0
     },
-    descripcion: {
+    description: {
       type: String,
-      required: true,
-      minlength: 7
-
+      required: true, 
+      trim: true,
+      minlength: 7,
+      maxlength: 500, 
     },
-    id_empleado: {
-      type: Number,
-      default: 1,
-      min: 1,
-    },
-    
   },
   {
-    versionKey:false,
-    timestamps:true
+    versionKey: false,
+    timestamps: true,
   },
 );
 

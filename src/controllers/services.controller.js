@@ -1,3 +1,6 @@
+// controller se encarga de manejar las peticiones y las respuestas de los clientes
+
+import { dbGetServices, insertService } from "../services/service.service.js"
 
 function getServices(req,res){
 
@@ -6,18 +9,49 @@ function getServices(req,res){
     })
 }
 
+
+
+
+
+
 function patchServices(req,res){
 
     res.json({
         msg:"editar usuarios"
     })
 }
-function createServices(req,res){
 
-    res.json({
-        msg:"crear usuario"
-    })
+
+
+
+async function createServices(req,res){
+
+    const data = await dbGetServices();
+
+    try {
+        const inputData = req.body
+        const createdService = await insertService(inputData)
+
+        res.status(201).json({
+            createdService: createdService,
+             data: data
+        })
+
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            msg: "no se pudo crear el servicio"
+        });
+        
+    }; 
 }
+
+
+
+
+
+
 function deleteServices(req,res){
 
     res.json({

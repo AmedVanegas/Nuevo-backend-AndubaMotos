@@ -4,12 +4,13 @@ import dbConnection from './config/mongo.config.js';
 
 import userRoutes from './routes/user.routes.js'
 
-import productRoutes from './routes/product.routes.js'
 
 import serviceRoutes from './routes/service.routes.js'
 
 
 const app = express();
+
+app. use(express.json()); // habilita la interpretacion del formato  json
 
 //coneccion a la base de datos
 
@@ -17,7 +18,7 @@ dbConnection()
 
 app.get("/health", function(req,res){
 
-    res.json({serviceRoutes
+    res.json({
         msg:"funciona"
     })
 })
@@ -26,7 +27,6 @@ app.get("/health", function(req,res){
 //endpoints agrupados
 
 app.use("/users", userRoutes)
-app.use("/products", productRoutes);
 app.use("/services",serviceRoutes );
 
 
