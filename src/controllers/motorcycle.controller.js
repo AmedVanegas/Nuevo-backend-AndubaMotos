@@ -1,51 +1,50 @@
-import { registerMotorcycle } from "../services/motorcycle.services.js"
+import {
+  dbGetMotorcycles,
+  registerMotorcycle,
+} from "../services/motorcycle.services.js";
 
-function getMc (req,res){
-
-    res.json({
-        msg:'lista motocicletas'
-    })
-
-}
-function patchMc (req,res){
+async function getMc(req, res) {
+  try {
+    const data = await dbGetMotorcycles();
 
     res.json({
-        msg:'actualizar motocicletas'
+      msg: "lista motocicletas",
+      data: data,
+    });
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+        msg:"no se pudieron obtener las motocicletas"
     })
-
+  }
 }
-async function createMc (req,res){
-
-    try {
-
-        const inputData = req.body
-
-        const data = await registerMotorcycle(inputData)
-
-        res.status(201).json({
-            msg:'moto registrada',
-            data:data
-        })
-
-
-        
-    } catch (error) {
-        console.log(error)
-
-        res.status(501).json({
-            msg:'no se pudo registrar la moto'
-        })
-
-        
-    }
-
+function patchMc(req, res) {
+  res.json({
+    msg: "actualizar motocicletas",
+  });
 }
-function deleteMc (req,res){
+async function createMc(req, res) {
+  try {
+    const inputData = req.body;
 
-    res.json({
-        msg:'eliminar motocicletas'
-    })
+    const data = await registerMotorcycle(inputData);
 
+    res.status(201).json({
+      msg: "moto registrada",
+      data: data,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(501).json({
+      msg: "no se pudo registrar la moto",
+    });
+  }
+}
+function deleteMc(req, res) {
+  res.json({
+    msg: "eliminar motocicletas",
+  });
 }
 
-export {getMc,patchMc,createMc,deleteMc}
+export { getMc, patchMc, createMc, deleteMc };

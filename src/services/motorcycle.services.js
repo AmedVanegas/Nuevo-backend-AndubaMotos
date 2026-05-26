@@ -9,4 +9,11 @@ const registerMotorcycle = async (newMotorcycle)=>{
 
 }
 
-export {registerMotorcycle}
+const dbGetMotorcycles = async()=> {
+
+    return await MotorcycleModel.find()
+
+
+}
+
+export {registerMotorcycle, dbGetMotorcycles}
