@@ -9,7 +9,7 @@ router. get( '/', getAppointment);
 
 router.post( '/', createAppointment);
 
-router.patch( '/', updateAppointment);
+router.patch( '/:id', updateAppointment);
 
 router.delete( '/:id', deletAppointment);
 

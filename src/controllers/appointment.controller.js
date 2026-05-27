@@ -43,10 +43,24 @@ const getAppointment = async ( req, res ) => {
     }
 };
 
-const updateAppointment = ( req, res ) => {
+const updateAppointment = async ( req, res ) => {
+
+    try {
+        const id = req.params.id;  //id de lo que quiero actualizar
+    const inputData = req.body;  // obtiene los paramteros que quiero actualizar
+
+    const data = await AppointmentModel.findByIdAndUpdate( id, inputData, {new: true});
+
     res.json({
-        msg: 'Actualiza la cita'
+        msg: 'Se actualizo la cita',
+        data: data
     });
+    } catch (error) {
+        console.error(error)
+        res.json({
+            msg: 'No se pudo actualizar la cita'
+        });
+    }
 } ;
 
 const deletAppointment = async ( req, res ) => {
