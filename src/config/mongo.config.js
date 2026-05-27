@@ -3,13 +3,13 @@ import mongoose from "mongoose";
 
 const localConnection = 'mongodb://127.0.0.1/Ecommerce'
 
-const remoteConnection = 'mongodb+srv://AmedVR:PeDHxm673IYEZD9s@cluster0.tpczf4c.mongodb.net/'
+const remoteConnection = 'mongodb+srv://AmedVR:ELVgOZuOwqSSr43s@cluster0.tpczf4c.mongodb.net/Ecommerce'
 
 
 async function dbConnection (){
     
     try {
-        await mongoose.connect(localConnection)
+        await mongoose.connect(remoteConnection)
         console.log('connected')
         
     } catch (error) {
