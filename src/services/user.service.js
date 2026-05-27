@@ -14,4 +14,10 @@ const dbDeleteuser = async (userID) => {
   return await Usermodel.findOneAndDelete({ _id: userID });
 };
 
-export { insertUser, dbGetUsers, dbDeleteuser };
+const dbUpdateUser = async (userID, updateData )=>{
+
+    return await Usermodel.findByIdAndUpdate(userID,updateData,{returnDocument:'after'})
+
+}
+
+export { insertUser, dbGetUsers, dbDeleteuser, dbUpdateUser};

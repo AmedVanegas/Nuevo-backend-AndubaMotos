@@ -10,7 +10,7 @@ const router  = Router()
 
 router.get("/", getUsers)
 
-router.patch('/', patchUsers)
+router.patch('/:userID', patchUsers)
 
 router.post("/", createUsers)
 

@@ -1,6 +1,7 @@
 import {
   dbDeleteuser,
   dbGetUsers,
+  dbUpdateUser,
   insertUser,
 } from "../services/user.service.js";
 
@@ -20,10 +21,25 @@ async function getUsers(req, res) {
   }
 }
 
-function patchUsers(req, res) {
-  res.json({
-    msg: "editar usuarios",
-  });
+async function patchUsers(req, res) {
+  try {
+    const id = req.params.userID;
+
+    const updateData = req.body;
+
+    const updated = await dbUpdateUser(id, updateData);
+
+    res.json({
+      msg: "Usuario editado",
+      user: updated,
+    });
+  } catch (error) {
+    console.log(error)
+
+    res.status(500).json({
+      msg:"No se pudo actualizar"
+    })
+  }
 }
 
 async function createUsers(req, res) {
@@ -54,10 +70,10 @@ async function deleteUsers(req, res) {
       deleted_user: deletedUser,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({
-      msg:"no se pudo eliminar el usuario"
-    })
+      msg: "no se pudo eliminar el usuario",
+    });
   }
 }
 
