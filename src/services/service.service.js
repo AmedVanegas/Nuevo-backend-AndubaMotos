@@ -15,10 +15,13 @@ const  dbinsertService = async(newService) => {
     return await servicemodel.findByIdAndDelete({_id: id})
  }
 
- 
+ const dbpatchservice = async (id, inputData)=> {
+    return await servicemodel.findOneAndUpdate({_id: id},
+         inputData, {new: true})
+ }
 
 
 
 export{
-    dbinsertService,dbGetServices,dbdeleteservice
+    dbinsertService,dbGetServices,dbdeleteservice,dbpatchservice
 };

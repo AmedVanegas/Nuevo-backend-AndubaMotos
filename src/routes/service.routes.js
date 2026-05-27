@@ -10,7 +10,7 @@ const router  = Router()
 
 router.get("/", getServices)
 
-router.patch("/", patchServices)
+router.patch("/:idservice", patchServices)
 
 router.post("/", createServices)
 

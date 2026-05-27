@@ -5,7 +5,7 @@
 
 
 import servicemodel from "../models/service.models.js";
-import { dbGetServices, dbinsertService, dbdeleteservice } from "../services/service.service.js"
+import { dbGetServices, dbinsertService, dbdeleteservice, dbpatchservice } from "../services/service.service.js"
 
 
 
@@ -61,11 +61,26 @@ async function createServices(req,res){
 
 
 
-function patchServices(req,res){
+const  patchServices = async(req, res)=>{
 
-    res.json({
-        msg:"editar usuarios"
+    try {
+        const id = req.params.idservice       // id de la ruta para encontrar el documento que quiero actualizar
+    const inputData = req.body                // obteniendo el objeto con el/los parametros que quiero actualizar
+
+    const data =await dbpatchservice(id,inputData)   //el objeto con las propiedades y los valores que deseamos actualizar
+
+
+    res.status(200).json({
+        msg:"se actualizo el servicio",
+        data: data
     })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            msg:'no se pudo actualizar el servicio'
+        })
+        
+    }
 }
 
 
