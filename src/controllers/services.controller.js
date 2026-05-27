@@ -4,7 +4,8 @@
 
 
 
-import { dbGetServices, dbinsertService } from "../services/service.service.js"
+import servicemodel from "../models/service.models.js";
+import { dbGetServices, dbinsertService, dbdeleteservice } from "../services/service.service.js"
 
 
 
@@ -45,7 +46,7 @@ async function createServices(req,res){
 
         
     } catch (error) {
-        console.log(error)
+        console.error(error)
         res.status(500).json({
             msg: "no se pudo crear el servicio"
         });
@@ -75,11 +76,24 @@ function patchServices(req,res){
 
 
 
-function deleteServices(req,res){
+ const  deleteServices = async (req,res) => {
 
-    res.json({
-        msg:"eliminar usuario"
-    })
+    try {
+        const id = req.params.idservice
+
+    const data = await dbdeleteservice(id);
+
+
+    res.status(200).json({
+        msg:"eliminar usuario",
+        data: data
+    });
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            msg: 'error: no se pudo eliminar el servicio'
+        })
+    }
 }
 
 

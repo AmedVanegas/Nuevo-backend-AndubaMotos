@@ -7,11 +7,18 @@ const  dbinsertService = async(newService) => {
 
  const dbGetServices = async ( ) => {
      return await servicemodel.find();
+
  }
 
+ const dbdeleteservice = async (id) => {
+    return await servicemodel.findOneAndDelete({_id: id})
+    return await servicemodel.findByIdAndDelete({_id: id})
+ }
+
+ 
 
 
 
 export{
-    dbinsertService,dbGetServices
+    dbinsertService,dbGetServices,dbdeleteservice
 };

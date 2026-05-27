@@ -14,7 +14,7 @@ router.patch("/", patchServices)
 
 router.post("/", createServices)
 
-router.delete("/", deleteServices)
+router.delete("/:idservice", deleteServices)
 
 
 
