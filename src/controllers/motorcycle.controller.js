@@ -1,5 +1,7 @@
 import {
+  dbDeleteMotorcycle,
   dbGetMotorcycles,
+  dbUpdateMotorcycle,
   registerMotorcycle,
 } from "../services/motorcycle.services.js";
 
@@ -12,16 +14,33 @@ async function getMc(req, res) {
       data: data,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({
-        msg:"no se pudieron obtener las motocicletas"
-    })
+      msg: "no se pudieron obtener las motocicletas",
+    });
   }
 }
-function patchMc(req, res) {
-  res.json({
-    msg: "actualizar motocicletas",
-  });
+async function patchMc(req, res) {
+  try {
+    const motorcycleId = req.params.motorcycleId;
+
+    const updateData = req.body;
+
+    const updatedMotorcycle = await dbUpdateMotorcycle(
+      motorcycleId,
+      updateData,
+    );
+
+    res.json({
+      msg: "actualizar motocicletas",
+      updatedMotorcycle: updatedMotorcycle,
+    });
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      msg:'No se pudo actualizar la motocicleta'
+    })
+  }
 }
 async function createMc(req, res) {
   try {
@@ -41,10 +60,22 @@ async function createMc(req, res) {
     });
   }
 }
-function deleteMc(req, res) {
-  res.json({
-    msg: "eliminar motocicletas",
-  });
+async function deleteMc(req, res) {
+  try {
+    let { motorcycleId } = req.params;
+
+    let deletedMotorcycle = await dbDeleteMotorcycle(motorcycleId);
+
+    res.json({
+      msg: "Motocicleta eliminada",
+      deletedMotorcycle: deletedMotorcycle,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      msg: "No se pudo eliminar la motocicleta",
+    });
+  }
 }
 
 export { getMc, patchMc, createMc, deleteMc };

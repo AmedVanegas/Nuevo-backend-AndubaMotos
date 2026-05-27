@@ -9,10 +9,10 @@ const router = Router()
 
 router.get('/', getMc)
 
-router.patch('/', patchMc)
+router.patch('/:motorcycleId', patchMc)
 
 router.post('/', createMc)
 
-router.delete('/', deleteMc)
+router.delete('/:motorcycleId', deleteMc)
 
 export default router
