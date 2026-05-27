@@ -1,6 +1,7 @@
 // Controller se encarga de manejar las peticiones y las respuestas de los clientes
 
-import { dbGetAppointment, insertAppointment } from "../services/appointment.services.js";
+import AppointmentModel from "../models/appointment.model.js";
+import { dbGetAppointment, insertAppointment, dbDeleteAppointment } from "../services/appointment.services.js";
 
 const createAppointment = async ( req, res ) => {
 
@@ -48,10 +49,22 @@ const updateAppointment = ( req, res ) => {
     });
 } ;
 
-const deletAppointment = ( req, res ) => {
+const deletAppointment = async ( req, res ) => {
+    try {
+        const id = req.params.id;
+
+    const data = await dbDeleteAppointment(id)
+
     res.json({
-        msg: 'Elimina la cita'
+        msg: 'Se elimino la cita',
+        data: data
     });
+    } catch (error) {
+        console.error(error);
+        res.json({
+            msg: 'Error: No se pudo eliminar la cita'
+        });
+    }
 } ;
 
 

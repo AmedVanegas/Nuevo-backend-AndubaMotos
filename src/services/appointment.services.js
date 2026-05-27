@@ -8,7 +8,12 @@ const dbGetAppointment = async ( ) => {
     return await AppointmentModel.find();
 }
 
+const dbDeleteAppointment = async (appointmentID) => {
+    return await AppointmentModel.findOneAndDelete({_id: appointmentID})
+}
+
 export {
     insertAppointment,
-    dbGetAppointment
+    dbGetAppointment,
+    dbDeleteAppointment
 }

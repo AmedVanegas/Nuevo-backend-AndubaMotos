@@ -11,6 +11,6 @@ router.post( '/', createAppointment);
 
 router.patch( '/', updateAppointment);
 
-router.delete( '/', deletAppointment);
+router.delete( '/:id', deletAppointment);
 
 export default router;
