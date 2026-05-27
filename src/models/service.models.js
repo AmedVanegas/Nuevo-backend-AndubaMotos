@@ -17,13 +17,14 @@ const serviceSchema = new Schema(
       default: 0
     },
     description: {
-      type: String,
-      required: true, 
+      type: String, 
       trim: true,
       minlength: 7,
       maxlength: 500, 
-    },
+    }
+    
   },
+
   {
     versionKey: false,
     timestamps: true,

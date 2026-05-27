@@ -5,23 +5,9 @@ const  dbinsertService = async(newService) => {
     
 }
 
-const dbGetServices = async ( ) => {
-    return await servicemodel.find();
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ const dbGetServices = async ( ) => {
+     return await servicemodel.find();
+ }
 
 
 
