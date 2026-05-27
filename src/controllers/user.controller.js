@@ -1,4 +1,8 @@
-import { dbGetUsers, insertUser } from "../services/user.service.js";
+import {
+  dbDeleteuser,
+  dbGetUsers,
+  insertUser,
+} from "../services/user.service.js";
 
 async function getUsers(req, res) {
   try {
@@ -9,10 +13,10 @@ async function getUsers(req, res) {
       data: data,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({
-      msg:"No se pudo obtener los usuarios"
-    })
+      msg: "No se pudo obtener los usuarios",
+    });
   }
 }
 
@@ -39,10 +43,22 @@ async function createUsers(req, res) {
     });
   }
 }
-function deleteUsers(req, res) {
-  res.json({
-    msg: "eliminar usuario",
-  });
+async function deleteUsers(req, res) {
+  try {
+    const id = req.params.userID;
+
+    const deletedUser = await dbDeleteuser(id);
+
+    res.json({
+      msg: "Usuario eliminado",
+      deleted_user: deletedUser,
+    });
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      msg:"no se pudo eliminar el usuario"
+    })
+  }
 }
 
 export { getUsers, createUsers, deleteUsers, patchUsers };

@@ -14,7 +14,7 @@ router.patch('/', patchUsers)
 
 router.post("/", createUsers)
 
-router.delete("/", deleteUsers)
+router.delete("/:userID", deleteUsers)
 
 
 

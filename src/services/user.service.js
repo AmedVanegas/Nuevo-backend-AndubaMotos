@@ -1,20 +1,17 @@
 //Este archivo tiene la funcion de hablar con la base de datos
 import Usermodel from "../models/User.model.js";
 
-const insertUser = async (newUser)=> {
+const insertUser = async (newUser) => {
+  return await Usermodel.create(newUser);
+};
 
-    return await Usermodel.create(newUser); 
-}
+const dbGetUsers = async () => {
+  return await Usermodel.find();
+};
 
+const dbDeleteuser = async (userID) => {
+  return await Usermodel.findByIdAndDelete(userID);
+  return await Usermodel.findOneAndDelete({ _id: userID });
+};
 
-const dbGetUsers = async ()=> {
-
-    return await Usermodel.find()
-
-
-}
-
-
-export{
-    insertUser, dbGetUsers
-}
+export { insertUser, dbGetUsers, dbDeleteuser };
