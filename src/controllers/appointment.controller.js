@@ -1,5 +1,7 @@
 // Controller se encarga de manejar las peticiones y las respuestas de los clientes
 
+import { dbGetAppointment, insertAppointment } from "../services/appointment.services.js";
+
 const createAppointment = async ( req, res ) => {
 
     try {
@@ -21,10 +23,23 @@ const createAppointment = async ( req, res ) => {
     }
 } ;
 
-const getAppointment = ( req, res ) => {
+const getAppointment = async ( req, res ) => {
+
+    try {
+        const data = await dbGetAppointment();
+
     res.json({
-        msg: 'Obtener todas las citas'
+        msg: 'Obtener todas las citas',
+        data: data
     });
+
+    } catch (error){
+        console.error(error);
+
+        res.json({
+            msg: 'Error no se pudo obtener la cita'
+        })
+    }
 };
 
 const updateAppointment = ( req, res ) => {

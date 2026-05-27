@@ -5,23 +5,26 @@ import { model, Schema } from "mongoose";
 const AppointmentSchema = new Schema({
     client: {
         type: String,
-        required: true
+        required: true,
         minlength: 3,    // Regla
         trim: true      // Modificador   
     },
     date: String,
     service:{
-        type: String
-        minlength: 7
-        required: true
+        type: String,
+        minlength: 7,
+        required: true,
         trim: true
     },
-    status: {
-        type: String
+        status: {
+        type: String,
         enum: ['confirmada', 'aplazada', 'cancelada'],
         default: 'confirmada'
     }
-},{});
+},{
+    versionKey: false,
+    timestamps: true  // createdAt - updatedAt
+});
 
 // El modelo: Asociacion entre la estructura de datos y la coleccion donde voy a guardar los datos
 

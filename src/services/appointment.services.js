@@ -4,6 +4,11 @@ const insertAppointment = async ( newAppointment ) => {
     return await AppointmentModel.create( newAppointment );
 }
 
+const dbGetAppointment = async ( ) => {
+    return await AppointmentModel.find();
+}
+
 export {
-    insertAppointment
+    insertAppointment,
+    dbGetAppointment
 }

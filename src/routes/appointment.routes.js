@@ -5,7 +5,7 @@ import { createAppointment, deletAppointment, getAppointment, updateAppointment 
 const router = Router();
 
 //define las rutas para la entidad Appointment
-router.get( '/', getAppointment);
+router. get( '/', getAppointment);
 
 router.post( '/', createAppointment);
 
