@@ -11,6 +11,12 @@ async function getMc(req, res) {
   try {
     const data = await dbGetMotorcycles();
 
+    if (!data || data.length === 0) {
+      return res.status(400).json({
+        msg: "No hay motos registradas",
+      });
+    }
+
     res.json({
       msg: "lista motocicletas",
       data: data,
@@ -22,22 +28,23 @@ async function getMc(req, res) {
     });
   }
 }
-
 async function getMcById(req, res) {
   try {
     const motorcycleId = req.params.motorcycleId;
 
-    if(!mongoose.Types.ObjectId.isValid(motorcycleId)){
-
+    if (!mongoose.Types.ObjectId.isValid(motorcycleId)) {
       return res.status(400).json({
-        msg:'Ingrese un id valido'
-      })
-
+        msg: "Ingrese un id valido",
+      });
     }
 
-
-
     const motorcycle = await dbGetMotorcycleById(motorcycleId);
+
+    if (!motorcycle) {
+      return res.status(400).json({
+        msg: "La moto no se encuentra registrada",
+      });
+    }
 
     res.json({
       msg: "Motocicleta",
@@ -50,7 +57,6 @@ async function getMcById(req, res) {
     });
   }
 }
-
 async function patchMc(req, res) {
   try {
     const motorcycleId = req.params.motorcycleId;
@@ -62,21 +68,30 @@ async function patchMc(req, res) {
       updateData,
     );
 
+    if (!updatedMotorcycle) {
+      throw new Error("La motocicleta no se encuentra registrada");
+    }
+
     res.json({
-      msg: "actualizar motocicletas",
+      msg: "Moto actualizada",
       updatedMotorcycle: updatedMotorcycle,
     });
   } catch (error) {
     console.log(error);
 
-    if(error.name === 'CastError'){
+    //VALIDACION DE EXEPCION
 
+    if (error.name === "CastError") {
       return res.status(400).json({
-        msg: 'Ingrese un id valido'
-      })
-
-
+        msg: "Ingrese un id valido",
+      });
     }
+
+    if (error.message.includes("La motocicleta no se encuentra registrada"))
+      res.status(500).json({
+        msg: error.message,
+      });
+
     res.status(500).json({
       msg: "No se pudo actualizar la motocicleta",
     });
@@ -104,15 +119,23 @@ async function deleteMc(req, res) {
   try {
     let { motorcycleId } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(motorcycleId)){
+    //VALIDACION DEFENSIVA
 
+    if (!mongoose.Types.ObjectId.isValid(motorcycleId)) {
       return res.status(400).json({
-        msg:'Ingrese un id valido'
-      })
-
+        msg: "Ingrese un id valido",
+      });
     }
 
     let deletedMotorcycle = await dbDeleteMotorcycle(motorcycleId);
+
+    //VALIDACION DIRECTA
+
+    if (!deletedMotorcycle) {
+      return res.status(400).json({
+        msg: "No se puede elminar un motocicleta que no se encuentra registrada",
+      });
+    }
 
     res.json({
       msg: "Motocicleta eliminada",
