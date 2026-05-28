@@ -1,5 +1,6 @@
 import {
   dbDeleteMotorcycle,
+  dbGetMotorcycleById,
   dbGetMotorcycles,
   dbUpdateMotorcycle,
   registerMotorcycle,
@@ -20,6 +21,25 @@ async function getMc(req, res) {
     });
   }
 }
+
+async function getMcById(req, res) {
+  try {
+    const motorcycleId = req.params.motorcycleId;
+
+    const motorcycle = await dbGetMotorcycleById(motorcycleId);
+
+    res.json({
+      msg: "Motocicleta",
+      motorcycle: motorcycle,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      msg: "No se pudo traer la motocicleta",
+    });
+  }
+}
+
 async function patchMc(req, res) {
   try {
     const motorcycleId = req.params.motorcycleId;
@@ -36,10 +56,10 @@ async function patchMc(req, res) {
       updatedMotorcycle: updatedMotorcycle,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({
-      msg:'No se pudo actualizar la motocicleta'
-    })
+      msg: "No se pudo actualizar la motocicleta",
+    });
   }
 }
 async function createMc(req, res) {
@@ -78,4 +98,4 @@ async function deleteMc(req, res) {
   }
 }
 
-export { getMc, patchMc, createMc, deleteMc };
+export { getMc, patchMc, createMc, deleteMc, getMcById };

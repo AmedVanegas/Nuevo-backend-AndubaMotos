@@ -5,6 +5,9 @@ const registerMotorcycle = async (newMotorcycle) => {
   return await MotorcycleModel.create(newMotorcycle);
 };
 
+const dbGetMotorcycleById = async (motorcycleId) => {
+  return await MotorcycleModel.findOne({ _id: motorcycleId });
+};
 const dbGetMotorcycles = async () => {
   return await MotorcycleModel.find();
 };
@@ -19,4 +22,10 @@ const dbUpdateMotorcycle = async (motorcycleId, updateData) => {
   });
 };
 
-export { registerMotorcycle, dbGetMotorcycles, dbDeleteMotorcycle, dbUpdateMotorcycle };
+export {
+  registerMotorcycle,
+  dbGetMotorcycles,
+  dbDeleteMotorcycle,
+  dbUpdateMotorcycle,
+  dbGetMotorcycleById,
+};

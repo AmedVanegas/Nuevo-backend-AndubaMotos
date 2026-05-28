@@ -1,18 +1,23 @@
-import {Router} from 'express'
+import { Router } from "express";
 
-import { getMc, patchMc, createMc, deleteMc } from '../controllers/motorcycle.controller.js'
+import {
+  getMc,
+  patchMc,
+  createMc,
+  deleteMc,
+  getMcById,
+} from "../controllers/motorcycle.controller.js";
 
+const router = Router();
 
-const router = Router()
+router.get("/", getMc);
 
+router.patch("/:motorcycleId", patchMc);
 
+router.get("/:motorcycleId", getMcById);
 
-router.get('/', getMc)
+router.post("/", createMc);
 
-router.patch('/:motorcycleId', patchMc)
+router.delete("/:motorcycleId", deleteMc);
 
-router.post('/', createMc)
-
-router.delete('/:motorcycleId', deleteMc)
-
-export default router
+export default router;
