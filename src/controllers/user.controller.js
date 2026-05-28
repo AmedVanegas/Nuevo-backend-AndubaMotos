@@ -1,6 +1,7 @@
 import {
   dbDeleteuser,
   dbGetUsers,
+  dbGetUsersbyId,
   dbUpdateUser,
   insertUser,
 } from "../services/user.service.js";
@@ -21,6 +22,28 @@ async function getUsers(req, res) {
   }
 }
 
+async function getUsersbyId(req, res) {
+  try {
+    const userID = req.params.userID;
+
+    const user = await dbGetUsersbyId(userID);
+
+    res.json({
+      msg: "Usuario",
+      user: user,
+    });
+  } catch (error) {
+
+    console.log(error)
+    res.status(500).json({
+
+      msg:"No se pudo obtener el usuario"
+
+
+    })
+  }
+}
+
 async function patchUsers(req, res) {
   try {
     const id = req.params.userID;
@@ -34,11 +57,11 @@ async function patchUsers(req, res) {
       user: updated,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
 
     res.status(500).json({
-      msg:"No se pudo actualizar"
-    })
+      msg: "No se pudo actualizar",
+    });
   }
 }
 
@@ -77,4 +100,4 @@ async function deleteUsers(req, res) {
   }
 }
 
-export { getUsers, createUsers, deleteUsers, patchUsers };
+export { getUsers, createUsers, deleteUsers, patchUsers, getUsersbyId};

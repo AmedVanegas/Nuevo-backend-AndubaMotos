@@ -9,6 +9,12 @@ const dbGetUsers = async () => {
   return await Usermodel.find();
 };
 
+const dbGetUsersbyId = async (userID)=>{
+
+  return await Usermodel.findOne({_id:userID})
+
+}
+
 const dbDeleteuser = async (userID) => {
   return await Usermodel.findByIdAndDelete(userID);
   return await Usermodel.findOneAndDelete({ _id: userID });
@@ -20,4 +26,4 @@ const dbUpdateUser = async (userID, updateData )=>{
 
 }
 
-export { insertUser, dbGetUsers, dbDeleteuser, dbUpdateUser};
+export { insertUser, dbGetUsers, dbDeleteuser, dbUpdateUser, dbGetUsersbyId};
