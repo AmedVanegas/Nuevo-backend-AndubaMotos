@@ -22,8 +22,8 @@ const createAppointment = async (req, res) => {
         if(error.code === 11000){
             return res.json({
                 msg: 'Error de validación por cliente duplicado'
-            })
-        } 
+            });
+        }; 
 
         res.status(500).json({
             msg: 'Error: No se pudo crear la cita'
