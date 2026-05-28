@@ -76,7 +76,11 @@ const updateAppointment = async (req, res) => {
         const id = req.params.id;  //id de lo que quiero actualizar
         const inputData = req.body;  // obtiene los paramteros que quiero actualizar
 
-        const data = await AppointmentModel.findByIdAndUpdate(id, inputData, { new: true });
+        const data = await AppointmentModel.findByIdAndUpdate(id, inputData, { returnDocument: 'after' });
+
+        if (!data) {
+            throw new Error( 'No se puede actualizar un producto inexistente' );
+        }
 
         res.json({
             msg: 'Se actualizo la cita',
@@ -85,11 +89,17 @@ const updateAppointment = async (req, res) => {
     } catch (error) {
         console.error(error)
 
-        if(error.name === 'CastError'){
+        if (error.name === 'CastError') {
             return res.status(400).json({
                 msg: 'No se encontro el ID'
-            })
-        }
+            });
+        };
+
+        if(error.message.includes('No se puede actualizar un producto inexistente' )){
+            return res.status(400).json({
+                msg: error.message
+            });
+        };
 
         res.status(500).json({
             msg: 'No se pudo actualizar la cita'
@@ -108,6 +118,12 @@ const deletAppointment = async (req, res) => {
         }
 
         const data = await dbDeleteAppointment(id);
+
+        if (!data) {
+            return res.json({
+                msg: 'No se puede eliminar un producto inexistente'
+            });
+        }
 
         res.json({
             msg: 'Se elimino la cita',
