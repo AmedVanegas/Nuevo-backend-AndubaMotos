@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import {
   dbDeleteMotorcycle,
   dbGetMotorcycleById,
@@ -25,6 +26,16 @@ async function getMc(req, res) {
 async function getMcById(req, res) {
   try {
     const motorcycleId = req.params.motorcycleId;
+
+    if(!mongoose.Types.ObjectId.isValid(motorcycleId)){
+
+      return res.status(400).json({
+        msg:'Ingrese un id valido'
+      })
+
+    }
+
+
 
     const motorcycle = await dbGetMotorcycleById(motorcycleId);
 
@@ -57,6 +68,15 @@ async function patchMc(req, res) {
     });
   } catch (error) {
     console.log(error);
+
+    if(error.name === 'CastError'){
+
+      return res.status(400).json({
+        msg: 'Ingrese un id valido'
+      })
+
+
+    }
     res.status(500).json({
       msg: "No se pudo actualizar la motocicleta",
     });
@@ -83,6 +103,14 @@ async function createMc(req, res) {
 async function deleteMc(req, res) {
   try {
     let { motorcycleId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(motorcycleId)){
+
+      return res.status(400).json({
+        msg:'Ingrese un id valido'
+      })
+
+    }
 
     let deletedMotorcycle = await dbDeleteMotorcycle(motorcycleId);
 
