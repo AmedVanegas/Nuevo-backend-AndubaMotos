@@ -4,7 +4,7 @@ const MotorcycleSchema = new Schema(
   {
     licensePlate: {
       type: String,
-      required: true,
+      required: [true, 'La placa es obligatoria'],
       uppercase: true,
       trim: true,
       maxlength: 6,

@@ -116,10 +116,14 @@ async function createMc(req, res) {
 
       return res.status(400).json({
         msg:"Ingrese un objeto sin propiedades repetidas",
-        repeated: repeatedValue
+        repeated: repeatedValue,
+        error: error.errors
+
 
       })
     }
+
+    
 
     res.status(501).json({
       msg: "no se pudo registrar la moto",
