@@ -21,7 +21,11 @@ const  dbinsertService = async(newService) => {
  }
 
 
+ const dbGetServicesByid = async (id) => {
+   return await servicemodel.findOne({_id: id})
+ }
+
 
 export{
-    dbinsertService,dbGetServices,dbdeleteservice,dbpatchservice
+    dbinsertService,dbGetServices,dbdeleteservice,dbpatchservice,dbGetServicesByid
 };

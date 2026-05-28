@@ -5,7 +5,7 @@
 
 
 import servicemodel from "../models/service.models.js";
-import { dbGetServices, dbinsertService, dbdeleteservice, dbpatchservice } from "../services/service.service.js"
+import { dbGetServices, dbinsertService, dbdeleteservice, dbpatchservice, dbGetServicesByid } from "../services/service.service.js"
 
 
 
@@ -113,6 +113,33 @@ const  patchServices = async(req, res)=>{
 
 
 
+
+
+
+
+
+const getServicesByid = async (req,res) => {
+
+    try {
+       const id = req.params.idservice       // id de la ruta para encontrar el documento que quiero actualizar
+                    // obteniendo el objeto con el/los parametros que quiero actualizar
+
+    const data =await dbGetServicesByid(id)   //el objeto con las propiedades y los valores que deseamos actualizar
+
+
+    res.status(200).json({
+        msg:"sbljhccvxcxzgcvxck,jhbñjkh",
+        data: data
+    }) 
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            msg:'error: no se pudo obtener el elemento'
+        })
+        
+    }
+}
+
 export {
-    getServices, createServices, deleteServices,patchServices
+    getServices, createServices, deleteServices,patchServices,getServicesByid
 }
