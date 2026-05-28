@@ -2,9 +2,10 @@
 
 // controller se encarga de manejar las peticiones y las respuestas de los clientes
 
+import mongoose from "express";
 
 
-import servicemodel from "../models/service.models.js";
+
 import { dbGetServices, dbinsertService, dbdeleteservice, dbpatchservice, dbGetServicesByid } from "../services/service.service.js"
 
 
@@ -76,10 +77,16 @@ const  patchServices = async(req, res)=>{
     })
     } catch (error) {
         console.error(error)
+
+        if(error.name === 'CastError'){
+            return res.status(400).json({
+                msg:'no se pudo actualizar el producto, porque el id es invalido'
+            })
+        }
+
         res.status(500).json({
-            msg:'no se pudo actualizar el servicio'
+            msg:'no se pudo actualizar el producto'
         })
-        
     }
 }
 
@@ -122,9 +129,11 @@ const getServicesByid = async (req,res) => {
 
     try {
        const id = req.params.idservice       // id de la ruta para encontrar el documento que quiero actualizar
-                    // obteniendo el objeto con el/los parametros que quiero actualizar
 
-    const data =await dbGetServicesByid(id)   //el objeto con las propiedades y los valores que deseamos actualizar
+
+    
+
+    const data =await dbGetServicesByid(id)   //el objeto con las propiedades y los valores que deseamos actualizar.
 
 
     res.status(200).json({
@@ -133,6 +142,7 @@ const getServicesByid = async (req,res) => {
     }) 
     } catch (error) {
         console.error(error)
+
         res.status(500).json({
             msg:'error: no se pudo obtener el elemento'
         })
