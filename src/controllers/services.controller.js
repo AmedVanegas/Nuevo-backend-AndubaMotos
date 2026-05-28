@@ -70,6 +70,19 @@ const  patchServices = async(req, res)=>{
 
     const data =await dbpatchservice(id,inputData)   //el objeto con las propiedades y los valores que deseamos actualizar
 
+    
+    if( ! date) {                                                                                // creo una excepcion (falsa)
+        throw new Error ('no se pudo actualizar el producto porque no se encuentra registrado') // yo creo un error(y crea una excepcion)
+    }
+
+    if ( ! data){
+        if( ! data) {
+            return res.json({
+                msg: 'no se puede actualizar un servicio que no se encuentra registrado'
+            })
+        }
+    }
+
 
     res.status(200).json({
         msg:"se actualizo el servicio",
@@ -81,6 +94,12 @@ const  patchServices = async(req, res)=>{
         if(error.name === 'CastError'){
             return res.status(400).json({
                 msg:'no se pudo actualizar el producto, porque el id es invalido'
+            })
+        }
+
+        if (error.message.includes('no se pudo actualizar el producto porque no se encuentra registrado')){
+            return res.json({
+                msg:error.message
             })
         }
 
@@ -103,7 +122,26 @@ const  patchServices = async(req, res)=>{
     try {
         const id = req.params.idservice
 
+
+
+        if(! mongoose.Types.ObjectId.isvalid(id)) {
+            return res.status(400).json({
+                msg: 'no se puede eliminar porque el ID proporcionado es invalido'
+            })
+        }
+
+
+
     const data = await dbdeleteservice(id);
+
+
+    if (!data){
+        if( ! data) {
+            return res.json({
+                msg: 'no se ´puede eliminar un servicio que no se encuentra registrado'
+            })
+        }
+    }
 
 
     res.status(200).json({
@@ -134,6 +172,14 @@ const getServicesByid = async (req,res) => {
     
 
     const data =await dbGetServicesByid(id)   //el objeto con las propiedades y los valores que deseamos actualizar.
+
+    if (!data){
+        if( ! data) {
+            return res.json({
+                msg: 'no se puede obtener un servicio que no se encuentra registrado'
+            })
+        }
+    }
 
 
     res.status(200).json({
