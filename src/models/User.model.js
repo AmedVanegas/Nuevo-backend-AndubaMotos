@@ -6,13 +6,15 @@ const UserSchema = new Schema(
   {
     username: {
       type: String,
-      required: true,
+      required: [true, 'El nombre es obligatorio'],
       trim: true,
+      unique:true
     },
     document: {
       type: String,
       required: true,
       maxlength: 16,
+      unique:true
     },
     phoneNumber: {
       type: String,
@@ -23,6 +25,7 @@ const UserSchema = new Schema(
       type: String,
       unique: true,
       required: true,
+      unique:true
     },
     password: {
       type: String,
