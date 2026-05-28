@@ -6,7 +6,7 @@ const serviceSchema = new Schema(
   {
       name: {
       type: String,
-      required: true, 
+      required: [true,'el nombre del servicio es obligatorio'], 
       trim: true,
       minlength: 3, 
       maxlength: 100, 
