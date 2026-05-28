@@ -1,7 +1,7 @@
 // Controller se encarga de manejar las peticiones y las respuestas de los clientes
 
 import AppointmentModel from "../models/appointment.model.js";
-import { dbGetAppointment, insertAppointment, dbDeleteAppointment } from "../services/appointment.services.js";
+import { dbGetAppointment, insertAppointment, dbDeleteAppointment, dbGetAppointmentByID } from "../services/appointment.services.js";
 
 const createAppointment = async ( req, res ) => {
 
@@ -18,7 +18,7 @@ const createAppointment = async ( req, res ) => {
     } catch (error) {
         console.error(error);
 
-        res.json ({
+        res.status(500).json ({
             msg: 'Error: No se pudo crear la cita'
         })
     }
@@ -36,12 +36,30 @@ const getAppointment = async ( req, res ) => {
 
     } catch (error){
         console.error(error);
-
-        res.json({
+        res.status(500).json({
             msg: 'Error no se pudo obtener la cita'
-        })
+        });
     }
 };
+
+const getAppointmentByID = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const data = await dbGetAppointmentByID (id)
+            res.json({
+                msg: 'Se obtuvo la cita por ID',
+                data: data
+            });
+
+    } catch (error){
+        console.error(error)
+        
+        res.status(500).json({
+        msg: 'No se pudo obtener la cita por ID'
+        });    
+    }
+}
 
 const updateAppointment = async ( req, res ) => {
 
@@ -57,7 +75,7 @@ const updateAppointment = async ( req, res ) => {
     });
     } catch (error) {
         console.error(error)
-        res.json({
+        res.status(500).json({
             msg: 'No se pudo actualizar la cita'
         });
     }
@@ -75,7 +93,7 @@ const deletAppointment = async ( req, res ) => {
     });
     } catch (error) {
         console.error(error);
-        res.json({
+        res.status(500).json({
             msg: 'Error: No se pudo eliminar la cita'
         });
     }
@@ -87,4 +105,5 @@ export {
     getAppointment,
     updateAppointment,
     deletAppointment,
+    getAppointmentByID
 };

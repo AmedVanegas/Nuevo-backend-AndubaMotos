@@ -8,6 +8,10 @@ const dbGetAppointment = async ( ) => {
     return await AppointmentModel.find();
 }
 
+const dbGetAppointmentByID = async ( appointmentID ) => {
+    return await AppointmentModel.findById( appointmentID ).select('service');
+}
+
 const dbDeleteAppointment = async (appointmentID) => {
     return await AppointmentModel.findOneAndDelete({_id: appointmentID})
 }
@@ -19,5 +23,6 @@ const dbUpdateAppointment = async ( id, inputData) => {
 export {
     insertAppointment,
     dbGetAppointment,
-    dbDeleteAppointment
+    dbDeleteAppointment,
+    dbGetAppointmentByID
 }
