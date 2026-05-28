@@ -7,6 +7,7 @@ const MotorcycleSchema = new Schema(
       required: true,
       uppercase: true,
       trim: true,
+      maxlength: 6,
       unique: true,
     },
     brand: {
@@ -23,6 +24,7 @@ const MotorcycleSchema = new Schema(
       type: String,
       required: true,
       trim: true,
+     
     },
     color: {
       type: String,

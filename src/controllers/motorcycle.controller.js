@@ -110,6 +110,17 @@ async function createMc(req, res) {
   } catch (error) {
     console.log(error);
 
+    if (error.code === 11000){
+
+      const repeatedValue = Object.entries(error.keyValue)
+
+      return res.status(400).json({
+        msg:"Ingrese un objeto sin propiedades repetidas",
+        repeated: repeatedValue
+
+      })
+    }
+
     res.status(501).json({
       msg: "no se pudo registrar la moto",
     });
