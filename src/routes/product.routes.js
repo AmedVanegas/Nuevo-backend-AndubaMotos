@@ -1,16 +1,21 @@
-import {Router} from 'express';
+import { Router } from "express";
 
 const router = Router();
 
-import { deleteProducts, getProducts, pacthProducts, postProducts } from '../controllers/product.controllers.js';
-
-
+import {
+  createProduct,
+  deleteProducts,
+  getProducts,
+  pacthProducts,
+} from "../controllers/product.controllers.js";
 
 // definir rutas para productos
-router.get ('/', getProducts);
-router.patch('/', pacthProducts);
-router.post('/',postProducts);
-router.delete('/', deleteProducts);
+router.get("/", getProducts);
 
+router.patch("/:productId", pacthProducts);
 
-export default router
+router.post("/", createProduct);
+
+router.delete("/:productId", deleteProducts);
+
+export default router;

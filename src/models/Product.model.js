@@ -11,7 +11,8 @@ const productSchema = new Schema(
     },
     nr:{
       type: String,
-      required: true
+      required: true,
+      unique:true
     },
 
     description: String,
@@ -45,9 +46,9 @@ const productSchema = new Schema(
 
 //2da parte: definir el modelo
 
-const productModel = model(
+const ProductModel = model(
   "products", // define el nombre de la coleccion que almacenara el objeto creado con este Schema
   productSchema, // asocia la estructura de datos a la coleccion
 );
 
-export default productModel;
+export default ProductModel;
