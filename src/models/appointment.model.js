@@ -7,7 +7,8 @@ const AppointmentSchema = new Schema({
         type: String,
         required: true,
         minlength: 3,    // Regla
-        trim: true      // Modificador   
+        trim: true,      // Modificador  
+        unique: true
     },
     date: String,
     service:{
