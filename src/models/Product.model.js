@@ -6,7 +6,7 @@ const productSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, 'Tiene que ingresar un nombre'],
       trim: true,
     },
     nr:{

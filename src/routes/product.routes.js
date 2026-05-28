@@ -5,6 +5,7 @@ const router = Router();
 import {
   createProduct,
   deleteProducts,
+  getProductById,
   getProducts,
   pacthProducts,
 } from "../controllers/product.controllers.js";
@@ -13,6 +14,8 @@ import {
 router.get("/", getProducts);
 
 router.patch("/:productId", pacthProducts);
+
+router.get('/:productId', getProductById)
 
 router.post("/", createProduct);
 
