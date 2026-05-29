@@ -141,8 +141,6 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
-<<<<<<< HEAD
-=======
 
->>>>>>> feature/user
-.DS_Store
+.DS_store
+
