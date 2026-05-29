@@ -10,6 +10,9 @@ const app = express();
 
 dbConnection()
 
+//middlewares
+app.use(express.json()) //Habilita la interpretacion de objetos JSON
+
 app.get("/health", function(req,res){
 
     res.json({
