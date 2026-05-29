@@ -15,7 +15,10 @@ const productSchema = new Schema(
       required: true,
       unique:true
     },
-
+    category:{
+      type: Schema.Types.ObjectId,
+      ref:"categories"
+    },
     description: String,
     price: {
       type: Number,

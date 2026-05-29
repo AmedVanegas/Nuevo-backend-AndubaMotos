@@ -17,3 +17,11 @@ const CategorySchema = new Schema({
     timeseries:true
 })
 
+const CategoryModel = model(
+    "categories",
+    CategorySchema
+
+)
+
+
+export default CategoryModel
