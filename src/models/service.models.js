@@ -1,0 +1,41 @@
+import { Schema, model } from "mongoose";
+
+//1ra parte: definir el esquema
+
+const serviceSchema = new Schema(
+  {
+      name: {
+      type: String,
+      required: [true,'el nombre del servicio es obligatorio'], 
+      trim: true,
+      minlength: 3, 
+      maxlength: 100, 
+    },
+    price: {
+      type: Number,
+      min: 0, 
+      default: 0
+    },
+    description: {
+      type: String, 
+      trim: true,
+      minlength: 7,
+      maxlength: 500, 
+    }
+    
+  },
+
+  {
+    versionKey: false,
+    timestamps: true,
+  },
+);
+
+//2da parte: definir el modelo
+
+const servicemodel = model(
+  "services", // define el nombre de la coleccion que almacenara el objeto creado con este Schema
+  serviceSchema, // asocia la estructura de datos a la coleccion
+);
+
+export default servicemodel;
