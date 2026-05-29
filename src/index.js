@@ -3,6 +3,7 @@ import express from 'express'
 import dbConnection from './config/mongo.config.js';
 
 import userRoutes from './routes/user.routes.js'
+import productsRoutes from './routes/product.routes.js';
 
 import mcRoutes from './routes/motorcycle.routes.js'
 
@@ -15,8 +16,9 @@ app.use(express.json())
 
 dbConnection()
 
-//middlewares
+
 app.use(express.json()) //Habilita la interpretacion de objetos JSON
+
 
 app.get("/health", function(req,res){
 
@@ -29,6 +31,7 @@ app.get("/health", function(req,res){
 //endpoints agrupados
 
 app.use("/users", userRoutes)
+app.use('/products', productsRoutes);
 
 app.use('/motorcycles', mcRoutes)
 
