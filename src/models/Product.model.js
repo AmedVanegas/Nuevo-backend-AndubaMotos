@@ -8,6 +8,7 @@ const productSchema = new Schema(
       type: String,
       required: [true, 'Tiene que ingresar un nombre'],
       trim: true,
+      unique:true
     },
     nr:{
       type: String,
@@ -20,12 +21,6 @@ const productSchema = new Schema(
       type: Number,
       default: 0,
       min: 0,
-    },
-    marcaMotocicleta: {
-      type: String,
-      required: true,
-      maxlength: 15
-
     },
     stock: {
       type: Number,
