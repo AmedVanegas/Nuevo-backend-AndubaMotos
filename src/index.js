@@ -7,6 +7,7 @@ import productsRoutes from './routes/product.routes.js';
 import mcRoutes from './routes/motorcycle.routes.js'
 import appointmentRoutes from './routes/appointment.routes.js'
 import serviceRoutes from './routes/service.routes.js'
+import categoryroutes from './routes/category.routes.js'
 
 
 const app = express();
@@ -38,8 +39,9 @@ app.use("/services",serviceRoutes );
 app.use('/products', productsRoutes);
 app.use('/motorcycles', mcRoutes)
 app.use( '/appointment', appointmentRoutes)
+app.use('/category', categoryroutes)
 
-
+ 
 
 // Levantar el servidor
 app.listen(3000, function () {
