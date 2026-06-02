@@ -12,28 +12,28 @@ import { dbGetServices, dbinsertService, dbdeleteservice, dbpatchservice, dbGetS
 
 
 
-const  getServices = async(req,res) => {
+const getServices = async (req, res) => {
 
     try {
-       const data = await dbGetServices();
-    
-    res.json({
-        msg:"obtener todos los servicios",
-        data: data
-    }) 
+        const data = await dbGetServices();
+
+        res.json({
+            msg: "obtener todos los servicios",
+            data: data
+        })
     } catch (error) {
         console.error(error);
         res.status(500).json({
             msg: 'Error: no se pudo obtener el listado de productos'
         });
-        
+
     };
 };
 
 
 
 
-const  createServices= async(req,res)=>{
+const createServices = async (req, res) => {
 
 
     try {
@@ -42,17 +42,17 @@ const  createServices= async(req,res)=>{
 
         res.status(201).json({
             createdService: createdService,
-            
+
         })
 
-        
+
     } catch (error) {
         console.error(error)
         res.status(500).json({
             msg: "no se pudo crear el servicio"
         });
-        
-    }; 
+
+    };
 }
 
 
@@ -62,49 +62,49 @@ const  createServices= async(req,res)=>{
 
 
 
-const  patchServices = async(req, res)=>{
+const patchServices = async (req, res) => {
 
     try {
         const id = req.params.idservice       // id de la ruta para encontrar el documento que quiero actualizar
-    const inputData = req.body                // obteniendo el objeto con el/los parametros que quiero actualizar
+        const inputData = req.body                // obteniendo el objeto con el/los parametros que quiero actualizar
 
-    const data =await dbpatchservice(id,inputData)   //el objeto con las propiedades y los valores que deseamos actualizar
+        const data = await dbpatchservice(id, inputData)   //el objeto con las propiedades y los valores que deseamos actualizar
 
-    
-    if( ! date) {                                                                                // creo una excepcion (falsa)
-        throw new Error ('no se pudo actualizar el producto porque no se encuentra registrado') // yo creo un error(y crea una excepcion)
-    }
 
-    if ( ! data){
-        if( ! data) {
-            return res.json({
-                msg: 'no se puede actualizar un servicio que no se encuentra registrado'
-            })
+        if (!date) {                                                                                // creo una excepcion (falsa)
+            throw new Error('no se pudo actualizar el producto porque no se encuentra registrado') // yo creo un error(y crea una excepcion)
         }
-    }
+
+        if (!data) {
+            if (!data) {
+                return res.json({
+                    msg: 'no se puede actualizar un servicio que no se encuentra registrado'
+                })
+            }
+        }
 
 
-    res.status(200).json({
-        msg:"se actualizo el servicio",
-        data: data
-    })
+        res.status(200).json({
+            msg: "se actualizo el servicio",
+            data: data
+        })
     } catch (error) {
         console.error(error)
 
-        if(error.name === 'CastError'){
+        if (error.name === 'CastError') {
             return res.status(400).json({
-                msg:'no se pudo actualizar el producto, porque el id es invalido'
+                msg: 'no se pudo actualizar el producto, porque el id es invalido'
             })
         }
 
-        if (error.message.includes('no se pudo actualizar el producto porque no se encuentra registrado')){
+        if (error.message.includes('no se pudo actualizar el producto porque no se encuentra registrado')) {
             return res.json({
-                msg:error.message
+                msg: error.message
             })
         }
 
         res.status(500).json({
-            msg:'no se pudo actualizar el producto'
+            msg: 'no se pudo actualizar el producto'
         })
     }
 }
@@ -117,14 +117,14 @@ const  patchServices = async(req, res)=>{
 
 
 
- const  deleteServices = async (req,res) => {
+const deleteServices = async (req, res) => {
 
     try {
         const id = req.params.idservice
 
 
 
-        if(! mongoose.Types.ObjectId.isvalid(id)) {
+        if (!mongoose.Types.ObjectId.isvalid(id)) {
             return res.status(400).json({
                 msg: 'no se puede eliminar porque el ID proporcionado es invalido'
             })
@@ -132,22 +132,22 @@ const  patchServices = async(req, res)=>{
 
 
 
-    const data = await dbdeleteservice(id);
+        const data = await dbdeleteservice(id);
 
 
-    if (!data){
-        if( ! data) {
-            return res.json({
-                msg: 'no se ´puede eliminar un servicio que no se encuentra registrado'
-            })
+        if (!data) {
+            if (!data) {
+                return res.json({
+                    msg: 'no se ´puede eliminar un servicio que no se encuentra registrado'
+                })
+            }
         }
-    }
 
 
-    res.status(200).json({
-        msg:"eliminar usuario",
-        data: data
-    });
+        res.status(200).json({
+            msg: "eliminar usuario",
+            data: data
+        });
     } catch (error) {
         console.error(error)
         res.status(500).json({
@@ -163,39 +163,39 @@ const  patchServices = async(req, res)=>{
 
 
 
-const getServicesByid = async (req,res) => {
+const getServicesByid = async (req, res) => {
 
     try {
-       const id = req.params.idservice       // id de la ruta para encontrar el documento que quiero actualizar
+        const id = req.params.idservice       // id de la ruta para encontrar el documento que quiero actualizar
 
 
-    
 
-    const data =await dbGetServicesByid(id)   //el objeto con las propiedades y los valores que deseamos actualizar.
 
-    if (!data){
-        if( ! data) {
-            return res.json({
-                msg: 'no se puede obtener un servicio que no se encuentra registrado'
-            })
+        const data = await dbGetServicesByid(id)   //el objeto con las propiedades y los valores que deseamos actualizar.
+
+        if (!data) {
+            if (!data) {
+                return res.json({
+                    msg: 'no se puede obtener un servicio que no se encuentra registrado'
+                })
+            }
         }
-    }
 
 
-    res.status(200).json({
-        msg:"sbljhccvxcxzgcvxck,jhbñjkh",
-        data: data
-    }) 
+        res.status(200).json({
+            msg: "sbljhccvxcxzgcvxck,jhbñjkh",
+            data: data
+        })
     } catch (error) {
         console.error(error)
 
         res.status(500).json({
-            msg:'error: no se pudo obtener el elemento'
+            msg: 'error: no se pudo obtener el elemento'
         })
-        
+
     }
 }
 
 export {
-    getServices, createServices, deleteServices,patchServices,getServicesByid
+    getServices, createServices, deleteServices, patchServices, getServicesByid
 }

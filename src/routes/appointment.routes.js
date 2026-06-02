@@ -1,6 +1,6 @@
 import {Router} from 'express';
 
-import { createAppointment, deletAppointment, getAppointment, getAppointmentByID, updateAppointment } from '../controllers/appointment.controller.js';
+import { createAppointment, deletAppointment, getAppointment, getAppointmentByID, updateAppointmentID } from '../controllers/appointment.controller.js';
 
 const router = Router();
 
@@ -8,7 +8,7 @@ const router = Router();
 router.get( '/', getAppointment);
 router.get('/:id', getAppointmentByID);
 router.post( '/', createAppointment);
-router.patch( '/:id', updateAppointment);
+router.patch( '/:id', updateAppointmentID);
 router.delete( '/:id', deletAppointment);
 
 export default router;

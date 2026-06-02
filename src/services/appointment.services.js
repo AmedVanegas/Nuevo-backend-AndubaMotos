@@ -22,6 +22,7 @@ const dbUpdateAppointment = async ( id, inputData) => {
 
 export {
     insertAppointment,
+    dbUpdateAppointment,
     dbGetAppointment,
     dbDeleteAppointment,
     dbGetAppointmentByID
