@@ -11,7 +11,7 @@ const AppointmentSchema = new Schema(
             trim: true
         },
         date: {
-            type: String,
+            type: Date,
             required: [true, 'La fecha de la cita es obligatoria']
         },
         service: {

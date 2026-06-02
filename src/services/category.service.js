@@ -7,7 +7,7 @@ const  dbinsertCategory = async(newCategory) => {
 }
 
  const dbGetCategory = async ( ) => {
-     return await CategoryModel.find();
+     return await CategoryModel.find().populate('registerignUserId', 'username');
 
  }
 

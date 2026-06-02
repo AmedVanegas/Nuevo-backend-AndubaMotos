@@ -20,26 +20,24 @@ const MotorcycleSchema = new Schema(
       required: true,
       trim: true,
     },
-    cellphone: {
-      type: String,
-      required: true,
-      trim: true,
-     
-    },
     color: {
       type: String,
       required: true,
       trim: true,
     },
     client: {
-      type: String,
-      required: true,
+      type:Schema.Types.ObjectId,
+      ref:"users"
     },
     services: 
       {
-        type: String,
-        required: true,
+        type: Schema.Types.ObjectId,
+        ref: "services",
       }
+    ,
+    registeringUserId: {
+      type:Schema.Types.ObjectId,
+      ref:"users"}
     ,
 
     status: {

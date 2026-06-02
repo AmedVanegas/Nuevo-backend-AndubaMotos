@@ -12,7 +12,8 @@ const CategorySchema = new Schema({
     },
     description:String,
     registerignUserId:{
-        type:String
+        type:Schema.Types.ObjectId,
+        ref:"users"
     }
 
 },{
