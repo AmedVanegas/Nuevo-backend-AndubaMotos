@@ -76,13 +76,11 @@ const getAppointmentByID = async (req, res) => {
     }
 }
 
-const updateAppointment = async (req, res) => {
+const updateAppointmentID = async (req, res) => {
 
     try {
         const id = req.params.id;  //id de lo que quiero actualizar
         const inputData = req.body;  // obtiene los paramteros que quiero actualizar
-
-        const data = await AppointmentModel.findByIdAndUpdate(id, inputData, { returnDocument: 'after' });
 
         if (!data) {
             throw new Error( 'No se puede actualizar un producto inexistente' );
@@ -146,7 +144,7 @@ const deletAppointment = async (req, res) => {
 export {
     createAppointment,
     getAppointment,
-    updateAppointment,
+    updateAppointmentID,
     deletAppointment,
     getAppointmentByID
 };
