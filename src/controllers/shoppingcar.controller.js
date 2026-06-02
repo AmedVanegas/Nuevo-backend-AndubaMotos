@@ -1,24 +1,17 @@
-
-
-// controller se encarga de manejar las peticiones y las respuestas de los clientes
-
 import mongoose from "express";
 
+import{dbinsertShoppingcar, dbGetShoppingcar, dbdeleteShoppingcar, dbpatchShoppingcar, dbGetShoppingcarByid} from "../services/shoppingcar.service.js"
 
 
-import {dbinsertService, dbGetServices, dbdeleteservice, dbpatchservice, dbGetServicesByid } from "../services/service.service.js"
-
-
-
-const createServices = async (req, res) => {
+const createdShoppingcar = async (req, res) => {
 
 
     try {
         const inputData = req.body
-        const createdService = await dbinsertService(inputData)
+        const createdShoppingcar = await dbinsertShoppingcar(inputData)
 
         res.status(201).json({
-            createdService: createdService,
+            createdShoppingcar: createdShoppingcar,
 
         })
 
@@ -26,69 +19,54 @@ const createServices = async (req, res) => {
     } catch (error) {
         console.error(error)
         res.status(500).json({
-            msg: "no se pudo crear el servicio"
+            msg: "no se pudo crear el la compra"
         });
 
     };
 }
 
-
-
-
-
-
-
-
-
-const getServices = async (req, res) => {
+const getShoppingcar = async (req, res) => {
 
     try {
-        const data = await dbGetServices();
+        const data = await dbGetShoppingcar();
 
         res.json({
-            msg: "obtener todos los servicios",
+            msg: "obtener todas las compras",
             data: data
         })
     } catch (error) {
         console.error(error);
         res.status(500).json({
-            msg: 'Error: no se pudo obtener el listado de productos'
+            msg: 'Error: no se pudo obtener el listado de la compra'
         });
 
     };
-};
+}
 
-
-
-
-
-
-
-
-const patchServices = async (req, res) => {
+const patchShoppingcar = async (req, res) => {
 
     try {
-        const id = req.params.idservice       // id de la ruta para encontrar el documento que quiero actualizar
+        const id = req.params.idshoppingcar       // id de la ruta para encontrar el documento que quiero actualizar
         const inputData = req.body                // obteniendo el objeto con el/los parametros que quiero actualizar
 
-        const data = await dbpatchservice(id, inputData)   //el objeto con las propiedades y los valores que deseamos actualizar
+        const data = await dbpatchShoppingcar(id, inputData)   //el objeto con las propiedades y los valores que deseamos actualizar
 
 
         if (!date) {                                                                                // creo una excepcion (falsa)
-            throw new Error('no se pudo actualizar el producto porque no se encuentra registrado') // yo creo un error(y crea una excepcion)
+            throw new Error('no se pudo actualizar el producto porque no se encuentra agregado al carrito') // yo creo un error(y crea una excepcion)
         }
 
         if (!data) {
             if (!data) {
                 return res.json({
-                    msg: 'no se puede actualizar un servicio que no se encuentra registrado'
+                    msg: 'no se puede actualizar un producto que no se encuentra en el carrito'
                 })
             }
         }
 
 
         res.status(200).json({
-            msg: "se actualizo el servicio",
+            msg: "se actualizo el producto",
             data: data
         })
     } catch (error) {
@@ -100,7 +78,7 @@ const patchServices = async (req, res) => {
             })
         }
 
-        if (error.message.includes('no se pudo actualizar el producto porque no se encuentra registrado')) {
+        if (error.message.includes('no se pudo actualizar el producto porque no se encuentra ene el carrito')) {
             return res.json({
                 msg: error.message
             })
@@ -112,18 +90,10 @@ const patchServices = async (req, res) => {
     }
 }
 
-
-
-
-
-
-
-
-
-const deleteServices = async (req, res) => {
+const deleteShoppingcar = async (req, res) => {
 
     try {
-        const id = req.params.idservice
+        const id = req.params.idshoppingcar
 
 
 
@@ -135,51 +105,44 @@ const deleteServices = async (req, res) => {
 
 
 
-        const data = await dbdeleteservice(id);
+        const data = await dbdeleteShoppingcar(id);
 
 
         if (!data) {
             if (!data) {
                 return res.json({
-                    msg: 'no se ´puede eliminar un servicio que no se encuentra registrado'
+                    msg: 'no se puede eliminar un producto que no se encuentra dentro del carrito de compras'
                 })
             }
         }
 
 
         res.status(200).json({
-            msg: "eliminar usuario",
+            msg: "eliminar producto",
             data: data
         });
     } catch (error) {
         console.error(error)
         res.status(500).json({
-            msg: 'error: no se pudo eliminar el servicio'
+            msg: 'error: no se pudo eliminar el producto'
         })
     }
 }
 
-
-
-
-
-
-
-
-const getServicesByid = async (req, res) => {
+const getShoppingcarByid = async (req, res) => {
 
     try {
-        const id = req.params.idservice       // id de la ruta para encontrar el documento que quiero actualizar
+        const id = req.params.idshoppingcar       // id de la ruta para encontrar el documento que quiero actualizar
 
 
 
 
-        const data = await dbGetServicesByid(id)   //el objeto con las propiedades y los valores que deseamos actualizar.
+        const data = await dbGetShoppingcarByid(id)   //el objeto con las propiedades y los valores que deseamos actualizar.
 
         if (!data) {
             if (!data) {
                 return res.json({
-                    msg: 'no se puede obtener un servicio que no se encuentra registrado'
+                    msg: 'no se puede obtener un producto que no se encuentra en el carrito'
                 })
             }
         }
@@ -193,14 +156,13 @@ const getServicesByid = async (req, res) => {
         console.error(error)
 
         res.status(500).json({
-            msg: 'error: no se pudo obtener el elemento'
+            msg: 'error: no se pudo obtener el producto'
         })
 
     }
 }
 
 
+export{createdShoppingcar,getShoppingcar,patchShoppingcar,deleteShoppingcar,getShoppingcarByid
 
-export {
-    getServices, createServices, deleteServices, patchServices, getServicesByid
 }

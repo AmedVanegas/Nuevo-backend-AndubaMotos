@@ -8,11 +8,9 @@ const AppointmentSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'users',
         },
-<<<<<<< HEAD
-        date: {
-=======
+
         schedule: {
->>>>>>> refs/remotes/origin/main
+
             type: Date,
             required: [true, 'La fecha de la cita es obligatoria']
         },

@@ -8,6 +8,7 @@ import mcRoutes from './routes/motorcycle.routes.js'
 import appointmentRoutes from './routes/appointment.routes.js'
 import serviceRoutes from './routes/service.routes.js'
 import categoryroutes from './routes/category.routes.js'
+import shoppingcarroutes from './routes/shoppingcar.routes.js'
 
 
 const app = express();
@@ -40,6 +41,7 @@ app.use('/products', productsRoutes);
 app.use('/motorcycles', mcRoutes)
 app.use( '/appointment', appointmentRoutes)
 app.use('/category', categoryroutes)
+app.use('/shoppingcar', shoppingcarroutes)
 
  
 
