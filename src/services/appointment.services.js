@@ -13,6 +13,7 @@ const dbGetAppointment = async () => {
   ]);
 };
 
+
 const dbGetAppointmentByID = async (appointmentID) => {
   return await AppointmentModel.findById(appointmentID).populate([
     { path: "client", select: "username phoneNumber" },
@@ -21,6 +22,7 @@ const dbGetAppointmentByID = async (appointmentID) => {
     { path: "service", select: "name price" },
   ]);
 };
+
 
 const dbDeleteAppointment = async (appointmentID) => {
   return await AppointmentModel.findOneAndDelete({ _id: appointmentID });

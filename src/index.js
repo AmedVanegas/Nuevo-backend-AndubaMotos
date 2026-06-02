@@ -41,7 +41,6 @@ app.use('/motorcycles', mcRoutes)
 app.use( '/appointment', appointmentRoutes)
 app.use('/category', categoryroutes)
 
- 
 
 // Levantar el servidor
 app.listen(3000, function () {

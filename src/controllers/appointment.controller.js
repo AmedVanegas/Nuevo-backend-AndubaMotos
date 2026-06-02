@@ -8,16 +8,22 @@ const createAppointment = async (req, res) => {
 
     try {
         const inputData = req.body;
-
         const data = await insertAppointment(inputData);
 
         res.json({
-            msg: 'Crea una nueva cita',
+            msg: 'Cita creada exitosamente',
             data: data
         });
 
     } catch (error) {
         console.error(error);
+
+        if (error.name === 'ValidationError') {
+            const messages = Object.values(error.errors).map(e => e.message);
+            return res.status(400).json({
+                msg: messages
+            });
+        }
 
         if(error.code === 11000){
             return res.json({
