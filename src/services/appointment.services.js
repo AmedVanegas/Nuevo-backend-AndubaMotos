@@ -9,7 +9,7 @@ const dbGetAppointment = async ( ) => {
 }
 
 const dbGetAppointmentByID = async ( appointmentID ) => {
-    return await AppointmentModel.findById( appointmentID ).select('service');
+    return await AppointmentModel.findById( appointmentID );
 }
 
 const dbDeleteAppointment = async (appointmentID) => {
