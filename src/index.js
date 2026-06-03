@@ -8,6 +8,7 @@ import mcRoutes from './routes/motorcycle.routes.js'
 import appointmentRoutes from './routes/appointment.routes.js'
 import serviceRoutes from './routes/service.routes.js'
 import categoryroutes from './routes/category.routes.js'
+import authRoutes from './routes/auth.routes.js' // importacion rutas auth
 
 
 const app = express();
@@ -34,12 +35,13 @@ app.get("/health", function(req,res){
 //endpoints agrupados
 
 
-app.use("/users", userRoutes)
-app.use("/services",serviceRoutes );
-app.use('/products', productsRoutes);
-app.use('/motorcycles', mcRoutes)
-app.use( '/appointment', appointmentRoutes)
-app.use('/category', categoryroutes)
+app.use("/api/users", userRoutes)
+app.use("/api/services",serviceRoutes );
+app.use('/api/products', productsRoutes);
+app.use('/api/motorcycles', mcRoutes)
+app.use( '/api/appointment', appointmentRoutes)
+app.use('/api/category', categoryroutes)
+app.use("/api/auth", authRoutes)
 
 
 // Levantar el servidor
