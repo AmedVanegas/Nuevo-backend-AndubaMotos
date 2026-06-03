@@ -9,21 +9,23 @@ const dbGetUsers = async () => {
   return await Usermodel.find();
 };
 
-const dbGetUsersbyId = async (userID)=>{
-
-  return await Usermodel.findOne({_id:userID})
-
-}
+const dbGetUsersbyId = async (userID) => {
+  return await Usermodel.findOne({ _id: userID });
+};
 
 const dbDeleteuser = async (userID) => {
   return await Usermodel.findByIdAndDelete(userID);
   return await Usermodel.findOneAndDelete({ _id: userID });
 };
 
-const dbUpdateUser = async (userID, updateData )=>{
+const dbUpdateUser = async (userID, updateData) => {
+  return await Usermodel.findByIdAndUpdate(userID, updateData, {
+    returnDocument: "after",
+  });
+};
 
-    return await Usermodel.findByIdAndUpdate(userID,updateData,{returnDocument:'after'})
+const dbGetUserbyUsername = async (username) => {
+  return await Usermodel.findOne({ username: username });
+};
 
-}
-
-export { insertUser, dbGetUsers, dbDeleteuser, dbUpdateUser, dbGetUsersbyId};
+export { insertUser, dbGetUsers, dbDeleteuser, dbUpdateUser, dbGetUsersbyId, dbGetUserbyUsername };
