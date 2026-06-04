@@ -97,11 +97,11 @@ const deleteShoppingcar = async (req, res) => {
 
 
 
-        if (!mongoose.Types.ObjectId.isvalid(id)) {
-            return res.status(400).json({
-                msg: 'no se puede eliminar porque el ID proporcionado es invalido'
-            })
-        }
+        // if (!mongoose.Types.ObjectId.isValid(id)) {
+        //     return res.status(400).json({
+        //         msg: 'no se puede eliminar porque el ID proporcionado es invalido'
+        //     })
+        // }
 
 
 
@@ -109,12 +109,12 @@ const deleteShoppingcar = async (req, res) => {
 
 
         if (!data) {
-            if (!data) {
+             
                 return res.json({
                     msg: 'no se puede eliminar un producto que no se encuentra dentro del carrito de compras'
                 })
             }
-        }
+        
 
 
         res.status(200).json({
