@@ -10,8 +10,8 @@ const dbGetShoppingcar = async ( ) => {
  }
 
  const dbdeleteShoppingcar = async (id) => {
-    return await shoppingcarmodel.findOneAndDelete({_id: id})
-   //  return await shoppingcarmodel.findByIdAndDelete({_id: id})
+   // return await shoppingcarmodel.findOneAndDelete({_id: id})
+   return await shoppingcarmodel.findByIdAndDelete( id )
  }
 
 

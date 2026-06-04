@@ -52,16 +52,16 @@ const patchShoppingcar = async (req, res) => {
         const data = await dbpatchShoppingcar(id, inputData)   //el objeto con las propiedades y los valores que deseamos actualizar
 
 
-        if (!date) {                                                                                // creo una excepcion (falsa)
+        if (!data) {                                                                                // creo una excepcion (falsa)
             throw new Error('no se pudo actualizar el producto porque no se encuentra agregado al carrito') // yo creo un error(y crea una excepcion)
         }
 
         if (!data) {
-            if (!data) {
+        
                 return res.json({
                     msg: 'no se puede actualizar un producto que no se encuentra en el carrito'
                 })
-            }
+      
         }
 
 
