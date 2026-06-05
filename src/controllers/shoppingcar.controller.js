@@ -1,4 +1,6 @@
-import mongoose from "express";
+import mongoose from "mongoose";
+
+
 
 import{dbinsertShoppingcar, dbGetShoppingcar, dbdeleteShoppingcar, dbpatchShoppingcar, dbGetShoppingcarByid} from "../services/shoppingcar.service.js"
 
@@ -97,11 +99,11 @@ const deleteShoppingcar = async (req, res) => {
 
 
 
-        // if (!mongoose.Types.ObjectId.isValid(id)) {
-        //     return res.status(400).json({
-        //         msg: 'no se puede eliminar porque el ID proporcionado es invalido'
-        //     })
-        // }
+          if (!mongoose.Types.ObjectId.isValid(id)) {
+              return res.status(400).json({
+                msg: 'no se puede eliminar porque el ID proporcionado es invalido'
+              });
+          };
 
 
 
@@ -139,13 +141,13 @@ const getShoppingcarByid = async (req, res) => {
 
         const data = await dbGetShoppingcarByid(id)   //el objeto con las propiedades y los valores que deseamos actualizar.
 
-        if (!data) {
+        
             if (!data) {
                 return res.json({
                     msg: 'no se puede obtener un producto que no se encuentra en el carrito'
                 })
             }
-        }
+        
 
 
         res.status(200).json({
