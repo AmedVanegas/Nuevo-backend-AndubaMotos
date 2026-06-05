@@ -117,7 +117,7 @@ async function createUsers(req, res) {
       throw new Error("Olvido agregar propiedad password en el login");
     }
 
-    inputData.password = password
+    inputData.password = password;
 
     const createdUser = await insertUser(inputData); //registra el usuario y guarda los datos en la variable
 

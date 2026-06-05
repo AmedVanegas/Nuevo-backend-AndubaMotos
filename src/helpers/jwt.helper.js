@@ -9,4 +9,18 @@ const generateToken = (payload) => {
  }
 };
 
-export { generateToken };
+const verifyToken = (token)=>{
+    try {
+
+        const payload = jsonwebtoken.verify(token, 'hola')
+
+        return payload
+
+        
+    } catch (error) {
+        console.log(error)
+        return null
+        
+    }
+}
+export { generateToken, verifyToken };
