@@ -6,18 +6,18 @@ const productSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, 'Tiene que ingresar un nombre'],
+      required: [true, "Tiene que ingresar un nombre"],
       trim: true,
-      unique:true
+      unique: true,
     },
-    nr:{
+    nr: {
       type: String,
       required: true,
-      unique:true
+      unique: true,
     },
-    category:{
+    category: {
       type: Schema.Types.ObjectId,
-      ref:"categories"
+      ref: "categories",
     },
     description: String,
     price: {
@@ -35,10 +35,22 @@ const productSchema = new Schema(
       enum: ["disponible", "no disponible", "refactorizado", "pendiente"],
       default: "disponible",
     },
+    reviews: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "reviews",
+      },
+    ],
+    avgStars: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 5,
+    },
   },
   {
-    versionKey:false,
-    timestamps:true
+    versionKey: false,
+    timestamps: true,
   },
 );
 

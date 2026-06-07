@@ -4,7 +4,7 @@ const MotorcycleSchema = new Schema(
   {
     licensePlate: {
       type: String,
-      required: [true, 'La placa es obligatoria'],
+      required: [true, "La placa es obligatoria"],
       uppercase: true,
       trim: true,
       maxlength: 6,
@@ -26,20 +26,13 @@ const MotorcycleSchema = new Schema(
       trim: true,
     },
     client: {
-      type:Schema.Types.ObjectId,
-      ref:"users"
+      type: Schema.Types.ObjectId,
+      ref: "users",
     },
-    services: 
-      {
-        type: Schema.Types.ObjectId,
-        ref: "services",
-      }
-    ,
     registeringUserId: {
-      type:Schema.Types.ObjectId,
-      ref:"users"}
-    ,
-
+      type: Schema.Types.ObjectId,
+      ref: "users",
+    },
     status: {
       type: Boolean,
       default: true,
