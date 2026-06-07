@@ -9,13 +9,12 @@ import appointmentRoutes from './routes/appointment.routes.js'
 import serviceRoutes from './routes/service.routes.js'
 import categoryroutes from './routes/category.routes.js'
 import shoppingcarroutes from './routes/shoppingcar.routes.js'
+import historyRoutes from './routes/history.routes.js'
+import orderRoutes from './routes/order.routes.js'
+import serviceRecordRoutes from './routes/serviceRecord.routes.js'
 
 
 const app = express();
-
-
-app. use(express.json()); // habilita la interpretacion del formato  json
-
 
 //coneccion a la base de datos
 
@@ -42,6 +41,9 @@ app.use('/motorcycles', mcRoutes)
 app.use( '/appointment', appointmentRoutes)
 app.use('/category', categoryroutes)
 app.use('/shoppingcar', shoppingcarroutes)
+app.use('/history', historyRoutes)
+app.use('/orders', orderRoutes)
+app.use('/serviceRecord', serviceRecordRoutes)
 
 
 // Levantar el servidor

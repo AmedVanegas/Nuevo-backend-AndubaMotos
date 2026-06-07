@@ -151,7 +151,7 @@ const getShoppingcarByid = async (req, res) => {
 
 
         res.status(200).json({
-            msg: "sbljhccvxcxzgcvxck,jhbñjkh",
+            msg: "Shopping carts",
             data: data
         })
     } catch (error) {

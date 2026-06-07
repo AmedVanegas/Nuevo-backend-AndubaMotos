@@ -2,7 +2,7 @@
 
 import mongoose from "mongoose";
 import AppointmentModel from "../models/appointment.model.js";
-import { dbGetAppointment, insertAppointment, dbDeleteAppointment, dbGetAppointmentByID } from "../services/appointment.services.js";
+import { dbGetAppointment, insertAppointment, dbDeleteAppointment, dbGetAppointmentByID, dbUpdateAppointment} from "../services/appointment.services.js";
 
 const createAppointment = async (req, res) => {
 
@@ -88,13 +88,15 @@ const updateAppointmentID = async (req, res) => {
         const id = req.params.id;  //id de lo que quiero actualizar
         const inputData = req.body;  // obtiene los paramteros que quiero actualizar
 
-        if (!data) {
-            throw new Error( 'No se puede actualizar un producto inexistente' );
+        if (!inputData) {
+            throw new Error( 'Ingrese datos para actualizar' );
         }
+
+        const updatedAppoinment = await dbUpdateAppointment(id,inputData)
 
         res.json({
             msg: 'Se actualizo la cita',
-            data: data
+            data: updatedAppoinment
         });
     } catch (error) {
         console.error(error)

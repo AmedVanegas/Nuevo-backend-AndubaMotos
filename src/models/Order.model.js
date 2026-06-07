@@ -19,6 +19,8 @@ const orderItemSchema = new Schema(
   },
   {
     _id: false,
+    versionKey:false,
+    timestamps:true
   },
 );
 
@@ -49,6 +51,7 @@ const orderSchema = new Schema(
   },
   {
     timestamps: true,
+    versionKey:false
   },
 );
 
