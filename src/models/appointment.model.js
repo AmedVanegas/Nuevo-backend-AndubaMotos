@@ -3,10 +3,12 @@ import { model, Schema } from "mongoose";
 // Model crea la estructura de los datos que se van a guardar en la base de datos, en este caso, la colección de citas (appointments
 
 const AppointmentSchema = new Schema(
+
   {
     client: {
       type: Schema.Types.ObjectId,
       ref: "users",
+
     },
 
     schedule: {

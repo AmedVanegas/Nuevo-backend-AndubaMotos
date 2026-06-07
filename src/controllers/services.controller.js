@@ -6,30 +6,7 @@ import mongoose from "express";
 
 
 
-import { dbGetServices, dbinsertService, dbdeleteservice, dbpatchservice, dbGetServicesByid } from "../services/service.service.js"
-
-
-
-
-
-const getServices = async (req, res) => {
-
-    try {
-        const data = await dbGetServices();
-
-        res.json({
-            msg: "obtener todos los servicios",
-            data: data
-        })
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            msg: 'Error: no se pudo obtener el listado de productos'
-        });
-
-    };
-};
-
+import {dbinsertService, dbGetServices, dbdeleteservice, dbpatchservice, dbGetServicesByid } from "../services/service.service.js"
 
 
 
@@ -54,6 +31,32 @@ const createServices = async (req, res) => {
 
     };
 }
+
+
+
+
+
+
+
+
+
+const getServices = async (req, res) => {
+
+    try {
+        const data = await dbGetServices();
+
+        res.json({
+            msg: "obtener todos los servicios",
+            data: data
+        })
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            msg: 'Error: no se pudo obtener el listado de productos'
+        });
+
+    };
+};
 
 
 
@@ -195,6 +198,8 @@ const getServicesByid = async (req, res) => {
 
     }
 }
+
+
 
 export {
     getServices, createServices, deleteServices, patchServices, getServicesByid
