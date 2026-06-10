@@ -1,6 +1,7 @@
 import { verifyToken } from "../helpers/jwt.helper.js";
+import { dbGetUserbyUsername } from "../services/user.service.js";
 
-const authenticationUser = (req, res, next) => {
+const authenticationUser = async (req, res, next) => {
 
   // 1.Se obtiene el Token
 
@@ -27,8 +28,41 @@ const authenticationUser = (req, res, next) => {
   // 3. Verificar la autenticidad del token
   const payload = verifyToken(token)
 
-  console.log('payload', payload);
-  console.log(payload)
+  if (!payload ){
+    return res.status(400).json({
+      msg:'Token invalido o inactivo'
+    })
+  }
+
+  const userFound = await dbGetUserbyUsername(payload.username)
+
+  if (!userFound){
+
+    return res.status(400).json({
+      msg: 'No es posible generar el token',
+      
+    })
+
+  }
+
+  const userFoundobj = userFound.toObject()
+
+  delete userFoundobj.cellphone
+  delete userFoundobj.password
+  delete userFoundobj.address  
+  delete userFoundobj.birthDate
+  delete userFoundobj.createdAt
+  delete userFoundobj.updatedAt
+  delete userFoundobj.document
+  
+
+
+
+  console.log('middleware', userFoundobj);
+
+   req.payload = userFoundobj
+
+   req.user = userFound
 
   next();
 };

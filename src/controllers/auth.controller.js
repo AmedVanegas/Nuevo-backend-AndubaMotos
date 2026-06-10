@@ -34,8 +34,8 @@ const loginUser = async (req, res) => {
 
     const payload = {
       _id: dbUser._id,
-      name: dbUser.name,
       email: dbUser.email,
+      username:dbUser.username,
       rol: dbUser.rol,
       status: dbUser.status,
     };
@@ -84,10 +84,16 @@ const loginUser = async (req, res) => {
   }
 };
 
-const renewToken = (req, res)=>{
+const renewToken = (req, res, next)=>{
+
+  const payload = req.payload
+
+  const user = req.user
 
   res.json({
-    msg:'se renueva el token'
+    msg:'se renueva el token',
+    payload:payload,
+    user: user
   })
 
 }

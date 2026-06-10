@@ -28,7 +28,7 @@ const dbGetUserbyUsername = async (username) => {
   if (!username) {
     throw new Error("Ingrese su Username");
   }
-  return await Usermodel.findOne({ username: username });
+  return await Usermodel.findOne({ username: username, status:'active' },);
 };
 
 export {
