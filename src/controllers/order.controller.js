@@ -122,7 +122,7 @@ const deleteOrder = async (req, res) => {
       return res.status(400).json({ msg: "ID de orden inválido" });
     }
 
-    const data = await dbDeleteOrders(orderID);
+    const data = await dbDeleteOrder(orderID);
 
     if (!data) {
       return res.status(404).json({ msg: "Orden no encontrada" });
@@ -146,7 +146,7 @@ const deleteAllOrdersByUserId = async (req, res) => {
       return res.status(400).json({ msg: "ID de usuario inválido" });
     }
 
-    const result = await dbDeleteAllOrdersByUserID(userID);
+    const result = await dbDeleteAllOrdersbyUserID(userID);
 
     if (result.deletedCount === 0) {
       return res.status(404).json({

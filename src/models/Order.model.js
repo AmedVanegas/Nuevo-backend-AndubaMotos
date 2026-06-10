@@ -18,9 +18,7 @@ const orderItemSchema = new Schema(
     },
   },
   {
-    _id: false,
-    versionKey:false,
-    timestamps:true
+    _id: false
   },
 );
 
