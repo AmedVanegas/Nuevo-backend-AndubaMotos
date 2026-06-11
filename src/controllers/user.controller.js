@@ -6,6 +6,7 @@ import {
   dbUpdateUser,
   insertUser,
 } from "../services/user.service.js";
+import { encryptedPassword } from "../helpers/bcrypt.helper.js";
 
 async function getUsers(req, res) {
   try {
@@ -28,7 +29,6 @@ async function getUsers(req, res) {
     });
   }
 }
-
 async function getUsersbyId(req, res) {
   try {
     const userID = req.params.userID;
@@ -58,7 +58,6 @@ async function getUsersbyId(req, res) {
     });
   }
 }
-
 async function patchUsers(req, res) {
   try {
     const id = req.params.userID;
@@ -100,7 +99,6 @@ async function patchUsers(req, res) {
     });
   }
 }
-
 async function createUsers(req, res) {
   try {
     const inputData = req.body; //Objeto JSON eviado en el request
@@ -110,6 +108,16 @@ async function createUsers(req, res) {
         msg: "Tiene que ingresar datos para crear el usuario",
       });
     }
+
+    //Se encripta la contraseña
+
+    const password = encryptedPassword(inputData.password);
+
+    if (password === null) {
+      throw new Error("Olvido agregar propiedad password en el login");
+    }
+
+    inputData.password = password;
 
     const createdUser = await insertUser(inputData); //registra el usuario y guarda los datos en la variable
 

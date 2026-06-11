@@ -12,6 +12,8 @@ import shoppingcarroutes from './routes/shoppingcar.routes.js'
 import historyRoutes from './routes/history.routes.js'
 import orderRoutes from './routes/order.routes.js'
 import serviceRecordRoutes from './routes/serviceRecord.routes.js'
+import authRoutes from './routes/auth.routes.js' // importacion rutas auth
+
 
 
 const app = express();
@@ -33,17 +35,18 @@ app.get("/health", function(req,res){
 
 //endpoints agrupados
 
-
-app.use("/users", userRoutes)
-app.use("/services",serviceRoutes );
-app.use('/products', productsRoutes);
-app.use('/motorcycles', mcRoutes)
-app.use( '/appointment', appointmentRoutes)
-app.use('/category', categoryroutes)
+app.use("/api/users", userRoutes)
+app.use("/api/services",serviceRoutes );
+app.use('/api/products', productsRoutes);
+app.use('/api/motorcycles', mcRoutes)
+app.use( '/api/appointment', appointmentRoutes)
+app.use('/api/category', categoryroutes)
+app.use("/api/auth", authRoutes)
 app.use('/shoppingcar', shoppingcarroutes)
 app.use('/history', historyRoutes)
 app.use('/orders', orderRoutes)
 app.use('/serviceRecord', serviceRecordRoutes)
+
 
 
 // Levantar el servidor

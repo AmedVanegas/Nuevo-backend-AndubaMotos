@@ -24,4 +24,19 @@ const dbUpdateUser = async (userID, updateData) => {
   });
 };
 
-export { insertUser, dbGetUsers, dbDeleteuser, dbUpdateUser, dbGetUsersbyId };
+const dbGetUserbyUsername = async (username) => {
+  if (!username) {
+    throw new Error("Ingrese su Username");
+  }
+  return await Usermodel.findOne({ username: username, status:'active' },);
+};
+
+export {
+  insertUser,
+  dbGetUsers,
+  dbDeleteuser,
+  dbUpdateUser,
+  dbGetUsersbyId,
+  dbGetUserbyUsername,
+};
+

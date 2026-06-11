@@ -11,13 +11,10 @@ const getProducts = async (req, res) => {
   try {
     const products = await dbGetProducts();
 
-    if(!products || products.length === 0 ){
-
+    if (!products || products.length === 0) {
       return res.status(400).json({
-        msg:'No hay productos registrados'
-      })
-
-
+        msg: "No hay productos registrados",
+      });
     }
 
     res.json({
@@ -102,16 +99,23 @@ const getProductById = async (req, res) => {
 
 const createProduct = async (req, res) => {
   try {
-    const inputData = req.body;// obtiene los datos enviados en la peticion
+    const inputData = req.body;
 
-    if (!inputData){
+    const {_id} = req.user
+
+    inputData.createdBy = _id
+
+    // obtiene los datos enviados en la peticion
+
+    if (!inputData) {
       return res.status(400).json({
         msg: "Tiene que ingresar datos para crear el producto",
       });
-
     }
 
-    const data = await registerProduct(inputData); // registra usando el modelo y guarda la respuesta en la constante data
+    const data = await registerProduct(inputData);
+
+    await data.populate("createdBy", "username _id email"); // registra usando el modelo y guarda la respuesta en la constante data
 
     res.status(201).json({
       // respondemos al clientre enviando los datos registrados y el codigo  de estado cuando se crea un recurso nuevo con exito

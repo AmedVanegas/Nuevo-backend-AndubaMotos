@@ -47,6 +47,13 @@ const productSchema = new Schema(
       min: 0,
       max: 5,
     },
+
+    createdBy:{
+      type:Schema.Types.ObjectId,
+      ref:'users',
+      required:true
+    }
+
   },
   {
     versionKey: false,
