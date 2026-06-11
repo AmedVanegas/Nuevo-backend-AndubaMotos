@@ -149,4 +149,4 @@ const getShoppingcarByid = async (req, res) => {
 }
 
 
-export{createdShoppingcar,getShoppingcar,patchShoppingcar,deleteShoppingcar,getShoppingcarByid}
+export{createdShoppingcar, getShoppingcar, patchShoppingcar, deleteShoppingcar, getShoppingcarByid}
