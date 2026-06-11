@@ -47,13 +47,10 @@ const authenticationUser = async (req, res, next) => {
 
   const userFoundobj = userFound.toObject()
 
-  delete userFoundobj.cellphone
   delete userFoundobj.password
-  delete userFoundobj.address  
-  delete userFoundobj.birthDate
   delete userFoundobj.createdAt
   delete userFoundobj.updatedAt
-  delete userFoundobj.document
+ 
   
 
 

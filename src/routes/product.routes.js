@@ -9,6 +9,7 @@ import {
   getProducts,
   pacthProducts,
 } from "../controllers/product.controllers.js";
+import authenticationUser from "../middlewares/authentication.middleware.js";
 
 // definir rutas para productos
 router.get("/", getProducts);
@@ -17,7 +18,7 @@ router.patch("/:productId", pacthProducts);
 
 router.get('/:productId', getProductById)
 
-router.post("/", createProduct);
+router.post("/", authenticationUser ,createProduct);
 
 router.delete("/:productId", deleteProducts);
 

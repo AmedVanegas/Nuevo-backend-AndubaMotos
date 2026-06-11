@@ -35,6 +35,11 @@ const productSchema = new Schema(
       enum: ["disponible", "no disponible", "refactorizado", "pendiente"],
       default: "disponible",
     },
+    createdBy:{
+      type:Schema.Types.ObjectId,
+      ref:'users',
+      required:true
+    }
   },
   {
     versionKey:false,

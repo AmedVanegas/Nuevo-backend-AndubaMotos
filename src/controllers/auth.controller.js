@@ -15,7 +15,7 @@ const loginUser = async (req, res) => {
     const dbUser = await dbGetUserbyUsername(inputData.username);
 
     if (!dbUser) {
-      console.log(dbUser)
+      console.log(dbUser);
       throw new Error("El usuario no existe, por favor registrese");
     }
 
@@ -35,7 +35,7 @@ const loginUser = async (req, res) => {
     const payload = {
       _id: dbUser._id,
       email: dbUser.email,
-      username:dbUser.username,
+      username: dbUser.username,
       rol: dbUser.rol,
       status: dbUser.status,
     };
@@ -66,7 +66,6 @@ const loginUser = async (req, res) => {
       error.message.includes("Ingrese") ||
       error.message.includes("Contraseña incorrecta") ||
       error.message.includes("El usuario no existe")
-
     ) {
       res.status(400).json({
         msg: error.message,
@@ -84,17 +83,45 @@ const loginUser = async (req, res) => {
   }
 };
 
-const renewToken = (req, res, next)=>{
+const renewToken = async (req, res, next) => {
+  // 1.Obtener los datos del usuario y la carga util de middleware
 
-  const payload = req.payload
+  const payload = req.payload;
 
-  const user = req.user
+  const user = req.user;
+
+  //2. verificar que el usuario que se va a generar el nuevo token y esta activo
+
+  const dbUser = await dbGetUserbyUsername(payload.username);
+
+  if (!dbUser) {
+    return res.status(400).json({
+      msg: "No se renueva el token porque el usuario ha sido eliminado, o su estado es inactivo",
+    });
+  }
+
+  // 3.Generar nuevo token a partir de los datos registrados en la base de datos
+
+  const newPayload = {
+    _id: dbUser._id,
+    email: dbUser.email,
+    username: dbUser.username,
+    rol: dbUser.rol,
+    status: dbUser.status,
+  };
+
+  const token = generateToken(newPayload);
+
+  const userFoundObj = dbUser.toObject();
+
+  delete userFoundObj.password;
+  delete userFoundObj.createdAt;
+  delete userFoundObj.updatedAt;
 
   res.json({
-    msg:'se renueva el token',
-    payload:payload,
-    user: user
-  })
-
-}
+    msg: "Token renovado",
+    token,
+    data:userFoundObj
+  });
+};
 export { loginUser, renewToken };
