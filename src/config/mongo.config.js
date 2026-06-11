@@ -1,16 +1,16 @@
 
 import mongoose from "mongoose";
 
-const localConnection = 'mongodb://127.0.0.1/Ecommerce'
+const DB_MONGO = process.env.DB_URI || 'mongodb://127.0.0.1/Ecommerce'
 
-const remoteConnection = 'mongodb+srv://AmedVR:ELVgOZuOwqSSr43s@cluster0.tpczf4c.mongodb.net/Ecommerce'
+
 
 
 
 async function dbConnection (){
     
     try {
-        await mongoose.connect(remoteConnection)
+        await mongoose.connect(DB_MONGO)
         console.log('connected')
         
     } catch (error) {

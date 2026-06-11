@@ -2,7 +2,7 @@ import jsonwebtoken from "jsonwebtoken";
 
 const generateToken = (payload) => {
  try {
-     return jsonwebtoken.sign(payload, "hola", { expiresIn: "1h" });
+     return jsonwebtoken.sign(payload, process.env.JWT_SEED, { expiresIn: "1h" });
  } catch (error) {
     console.log(error)
     return null
@@ -12,7 +12,7 @@ const generateToken = (payload) => {
 const verifyToken = (token)=>{
     try {
 
-        const payload = jsonwebtoken.verify(token, 'hola')
+        const payload = jsonwebtoken.verify(token, process.env.JWT_SEED)
 
         return payload
 

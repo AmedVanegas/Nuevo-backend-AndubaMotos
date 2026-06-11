@@ -18,6 +18,8 @@ import authRoutes from './routes/auth.routes.js' // importacion rutas auth
 
 const app = express();
 
+const PORT = process.env.PORT || 3001
+
 //coneccion a la base de datos
 
 dbConnection();
@@ -50,6 +52,6 @@ app.use('/serviceRecord', serviceRecordRoutes)
 
 
 // Levantar el servidor
-app.listen(3000, function () {
+app.listen(PORT, function () {
     console.log("server runng on http://localhost:3000");
 });
