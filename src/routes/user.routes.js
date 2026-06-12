@@ -8,9 +8,8 @@ import { ROLES } from "../config/global.config.js"
 const router = Router()
 
 router.get("/", getUsers)
-router.patch('/:userID', authenticationUser, authorizatonUser, patchUsers)
-router.get("/:userID", authenticationUser, authorizatonUser, getUsersbyId)
-router.post("/", authenticationUser, authorizatonUser, createUsers)
+router.patch('/:userID', authenticationUser, authorizationUser, patchUsers)
+router.get("/:userID", authenticationUser, authorizationUser, getUsersbyId)
 router.delete("/:userID", authenticationUser, deleteUsers)
 router.post("/", authenticationUser,authorizationUser([ROLES.ADMIN,ROLES.OWNER]),createUsers)
 
