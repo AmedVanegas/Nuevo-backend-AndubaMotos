@@ -1,7 +1,7 @@
 import { Router } from "express"
 
 import {getCategory, patchCategory, createCategory, deleteCategory, getCategoryByid, } from '../controllers/category.controller.js'
-
+import authenticationUser from "../middlewares/authentication.middleware.js";
 
 const router  = Router()
 
@@ -10,13 +10,13 @@ const router  = Router()
 
 router.get("/", getCategory)
 
-router.post("/", createCategory)
+router.post("/", authenticationUser, createCategory)
 
-router.delete("/:id",  deleteCategory)
+router.delete("/:id", authenticationUser, deleteCategory)
 
-router.get("/:id", getCategoryByid)
+router.get("/:id", authenticationUser, getCategoryByid)
 
-router.patch("/:id", patchCategory)
+router.patch("/:id", authenticationUser, patchCategory)
 
 
 

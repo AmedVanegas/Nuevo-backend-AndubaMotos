@@ -65,9 +65,13 @@ const UserSchema = new Schema(
         enum:['active','inactive','banned'],
         type:String,
         default:'active'
-    }
-
-    
+    },
+ createdBy:{
+      type:Schema.Types.ObjectId,
+      ref:'users',
+      required:true
+    },
+   
   },
   {
     versionKey:false,

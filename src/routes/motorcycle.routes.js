@@ -7,17 +7,18 @@ import {
   deleteMc,
   getMcById,
 } from "../controllers/motorcycle.controller.js";
+import authenticationUser from "../middlewares/authentication.middleware.js";
 
 const router = Router();
 
 router.get("/", getMc);
 
-router.patch("/:motorcycleId", patchMc);
+router.patch("/:motorcycleId", authenticationUser, patchMc);
 
-router.get("/:motorcycleId", getMcById);
+router.get("/:motorcycleId", authenticationUser, getMcById);
 
-router.post("/", createMc);
+router.post("/", authenticationUser, createMc);
 
-router.delete("/:motorcycleId", deleteMc);
+router.delete("/:motorcycleId", authenticationUser, deleteMc);
 
 export default router;

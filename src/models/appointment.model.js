@@ -32,6 +32,12 @@ const AppointmentSchema = new Schema(
       enum: ["confirmada", "aplazada", "cancelada"],
       default: "confirmada",
     },
+
+     createdBy:{
+      type:Schema.Types.ObjectId,
+      ref:'users',
+      required:true
+    },
   },
   {
     versionKey: false,
