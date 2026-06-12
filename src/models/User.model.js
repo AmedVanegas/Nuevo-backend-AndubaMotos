@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { ALLOWED_ROLES, ROLES } from "../config/global.config.js";
 
 // 1. Definir esquema
 
@@ -33,8 +34,8 @@ const UserSchema = new Schema(
     },
     rol: {
       type: String,
-      enum: ["client", "admin", "seller","owner"],
-      default: "client",
+      enum: ALLOWED_ROLES,
+      default: ROLES.CLIENT,
     },
     address: {
       street: {
