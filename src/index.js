@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors'
 
 import dbConnection from './config/mongo.config.js';
 
@@ -26,6 +27,9 @@ dbConnection();
 
 app.use(express.json());  // habilita la lectura de los formatos json
 
+app.use(cors({
+    origin: 'http://localhost:4200'
+}))
 
 app.get("/health", function(req,res){
 

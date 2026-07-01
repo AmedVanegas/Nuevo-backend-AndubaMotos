@@ -19,7 +19,7 @@ async function getUsers(req, res) {
     }
 
     res.json({
-      msg: "lista de todos los usuarios",
+      msg: "Lista de todos los usuarios",
       data: data,
     });
   } catch (error) {

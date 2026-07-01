@@ -19,7 +19,7 @@ const getProducts = async (req, res) => {
 
     res.json({
       msg: "Lista de productos",
-      products: products,
+      data: products,
     });
   } catch (error) {
     console.log(error);
