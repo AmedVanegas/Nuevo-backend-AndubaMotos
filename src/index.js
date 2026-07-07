@@ -14,7 +14,7 @@ import historyRoutes from './routes/history.routes.js'
 import orderRoutes from './routes/order.routes.js'
 import serviceRecordRoutes from './routes/serviceRecord.routes.js'
 import authRoutes from './routes/auth.routes.js' // importacion rutas auth
-
+import rolesRoutes from './routes/roles.routes.js'
 
 
 const app = express();
@@ -52,6 +52,7 @@ app.use('/shoppingcar', shoppingcarroutes)
 app.use('/history', historyRoutes)
 app.use('/orders', orderRoutes)
 app.use('/serviceRecord', serviceRecordRoutes)
+app.use('/api/roles', rolesRoutes)
 
 
 

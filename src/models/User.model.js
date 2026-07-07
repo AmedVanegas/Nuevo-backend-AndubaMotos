@@ -31,6 +31,7 @@ const UserSchema = new Schema(
     password: {
       type: String,
       required: true,
+      minLenght: true
     },
     rol: {
       type: String,
