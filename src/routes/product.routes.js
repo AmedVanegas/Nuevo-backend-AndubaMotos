@@ -14,12 +14,18 @@ import authenticationUser from "../middlewares/authentication.middleware.js";
 // definir rutas para productos
 router.get("/", getProducts);
 
-router.patch("/:productId",authenticationUser, pacthProducts);
+router.patch("/:productId",
+  //authenticationUser, 
+  pacthProducts);
 
 router.get('/:productId', getProductById)
 
-router.post("/", authenticationUser ,createProduct);
+router.post("/", 
+  //authenticationUser ,
+  createProduct);
 
-router.delete("/:productId",authenticationUser, deleteProducts);
+router.delete("/:productId",
+  //uthenticationUser, 
+  deleteProducts);
 
 export default router;

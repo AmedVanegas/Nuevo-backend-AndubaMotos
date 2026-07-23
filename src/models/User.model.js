@@ -70,7 +70,7 @@ const UserSchema = new Schema(
  createdBy:{
       type:Schema.Types.ObjectId,
       ref:'users',
-      required:true
+      required:false
     },
    
   },

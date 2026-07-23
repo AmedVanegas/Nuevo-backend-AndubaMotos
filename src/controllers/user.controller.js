@@ -39,13 +39,19 @@ async function getUsersbyId(req, res) {
       });
     }
 
-    const user = await dbGetUsersbyId(userID);
+    let user = await dbGetUsersbyId(userID);
+    
 
     if (!user) {
       return res.status(400).json({
         msg: "El usuario no existe",
       });
     }
+
+    user = user.toObject()
+    delete user.password
+
+   
 
     res.json({
       msg: "Usuario",

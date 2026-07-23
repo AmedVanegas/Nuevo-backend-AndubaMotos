@@ -47,11 +47,15 @@ const productSchema = new Schema(
       min: 0,
       max: 5,
     },
+    productImage:{
+      type: String,
+      default: 'https://preview.redd.it/choosing-your-first-a2-sport-bike-yamaha-r7-honda-cbr500r-v0-2dzuowcq0ief1.jpg?width=640&crop=smart&auto=webp&s=f03f5ebd577adb1dee760680d25c4150923afb3c'
+    },
 
     createdBy:{
       type:Schema.Types.ObjectId,
       ref:'users',
-      required:true
+      required:false
     }
 
   },
