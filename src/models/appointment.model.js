@@ -8,7 +8,7 @@ const AppointmentSchema = new Schema(
     client: {
       type: Schema.Types.ObjectId,
       ref: "users",
-
+      required:true
     },
 
     schedule: {
@@ -18,25 +18,21 @@ const AppointmentSchema = new Schema(
     service: {
       type: Schema.Types.ObjectId,
       ref: "services",
+      required:true
     },
     motorcycle: {
       type: Schema.Types.ObjectId,
       ref: "Motorcycles",
+      required:true
     },
     registeringUserId: {
       type: Schema.Types.ObjectId,
-      ref: "users",
+      ref: "users"
     },
     status: {
       type: String,
       enum: ["confirmada", "aplazada", "cancelada"],
       default: "confirmada",
-    },
-
-     createdBy:{
-      type:Schema.Types.ObjectId,
-      ref:'users',
-      required:true
     },
   },
   {

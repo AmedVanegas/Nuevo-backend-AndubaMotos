@@ -34,6 +34,7 @@ const productSchema = new Schema(
       type: String,
       enum: ["disponible", "no disponible", "refactorizado", "pendiente"],
       default: "disponible",
+      required:true
     },
     reviews: [
       {
@@ -55,7 +56,7 @@ const productSchema = new Schema(
     createdBy:{
       type:Schema.Types.ObjectId,
       ref:'users',
-      required:false
+      required:true
     }
 
   },

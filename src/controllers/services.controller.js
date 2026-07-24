@@ -1,9 +1,7 @@
 
-
 // controller se encarga de manejar las peticiones y las respuestas de los clientes
 
-import mongoose from "express";
-
+import express from "express";
 
 
 import {dbinsertService, dbGetServices, dbdeleteservice, dbpatchservice, dbGetServicesByid } from "../services/service.service.js"
@@ -15,6 +13,10 @@ const createServices = async (req, res) => {
 
     try {
         const inputData = req.body
+
+        inputData.registeringUserId = req.payload._id
+
+
         const createdService = await dbinsertService(inputData)
 
         res.status(201).json({
@@ -74,7 +76,7 @@ const patchServices = async (req, res) => {
         const data = await dbpatchservice(id, inputData)   //el objeto con las propiedades y los valores que deseamos actualizar
 
 
-        if (!date) {                                                                                // creo una excepcion (falsa)
+        if (!data) {                                                                                // creo una excepcion (falsa)
             throw new Error('no se pudo actualizar el producto porque no se encuentra registrado') // yo creo un error(y crea una excepcion)
         }
 

@@ -10,22 +10,16 @@ import {
   pacthProducts,
 } from "../controllers/product.controllers.js";
 import authenticationUser from "../middlewares/authentication.middleware.js";
+import { ROLES } from "../config/global.config.js";
+import { authorizationUser } from "../middlewares/authorization.middleware.js";
+
+const STAFF = [ROLES.OWNER, ROLES.ADMIN, ROLES.EMPLOYEE]
 
 // definir rutas para productos
 router.get("/", getProducts);
-
-router.patch("/:productId",
-  //authenticationUser, 
-  pacthProducts);
-
 router.get('/:productId', getProductById)
-
-router.post("/", 
-  //authenticationUser ,
-  createProduct);
-
-router.delete("/:productId",
-  //uthenticationUser, 
-  deleteProducts);
+router.patch("/:productId", authenticationUser, authorizationUser(STAFF), pacthProducts);
+router.post("/", authenticationUser, authorizationUser(STAFF), createProduct);
+router.delete("/:productId", authenticationUser, authorizationUser(STAFF), deleteProducts);
 
 export default router;

@@ -1,26 +1,57 @@
+import { Router } from "express";
 
+import {
+  createdShoppingcar,
+  getShoppingcar,
+  patchShoppingcar,
+  deleteShoppingcar,
+  getShoppingcarByid,
+} from "../controllers/shoppingcar.controller.js";
+import authenticationUser from "../middlewares/authentication.middleware.js";
+import { isOwnerOrStaff } from "../middlewares/ownership.middleware.js";
+import shoppingcarmodel from "../models/shoppingcar.models.js";
 
-import { Router } from "express"
-
-
-import{createdShoppingcar,getShoppingcar,patchShoppingcar,deleteShoppingcar,getShoppingcarByid} from '../controllers/shoppingcar.controller.js'
-
-
-const router  = Router()
+const router = Router();
 
 //Definicion rutas
 
+router.post("/", authenticationUser, createdShoppingcar);
+router.get("/", authenticationUser, getShoppingcar); 
 
-router.post("/", createdShoppingcar)
+router.patch(
+  "/:idshoppingcar",
+  authenticationUser,
+  isOwnerOrStaff(async (req) => {
+    const cart = await shoppingcarmodel
+      .findById(req.params.idshoppingcar)
+      .select("user");
+    return cart?.user;
+  }),
+  patchShoppingcar,
+);
 
-router.get("/", getShoppingcar)
+router.delete(
+  "/:idshoppingcar",
+  authenticationUser,
+  isOwnerOrStaff(async (req) => {
+    const cart = await shoppingcarmodel
+      .findById(req.params.idshoppingcar)
+      .select("user");
+    return cart?.user;
+  }),
+  deleteShoppingcar,
+);
 
-router.patch("/:idshoppingcar", patchShoppingcar)
+router.get(
+  "/:idshoppingcar",
+  authenticationUser,
+  isOwnerOrStaff(async (req) => {
+    const cart = await shoppingcarmodel
+      .findById(req.params.idshoppingcar)
+      .select("user");
+    return cart?.user;
+  }),
+  getShoppingcarByid,
+);
 
-router.delete("/:idshoppingcar", deleteShoppingcar)
-
-router.get("/:idshoppingcar", getShoppingcarByid)
-
-
-
-export default router
+export default router;

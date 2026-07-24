@@ -9,17 +9,37 @@ import {
   updateOrder,
 } from "../controllers/order.controller.js";
 import authenticationUser from "../middlewares/authentication.middleware.js";
+import { isOwnerOrStaff } from "../middlewares/ownership.middleware.js"
+
 
 const router = Router();
 
 router.get("/", getOrders);
-router.post("/",authenticationUser, createOrder);
+router.post("/", authenticationUser, createOrder);
 
-router.get("/user/:userID", getOrdersByUserId);
-router.delete("/user/:userID",authenticationUser, deleteAllOrdersByUserId);
+router.get("/user/:userID", authenticationUser, isOwnerOrStaff(async (req) => req.params.userID), getOrdersByUserId);
+router.delete(
+  "/:orderID",
+  authenticationUser,
+  isOwnerOrStaff(async (req) => {
+    const order = await OrderModel.findById(req.params.orderID).select("user");
+    return order?.user;
+  }),
+  deleteOrder,
+);
 
-router.delete("/:orderID",authenticationUser, deleteOrder);
-router.patch("/:orderID",authenticationUser, updateOrder);
-router.get('/:orderID', getOrderByID)
+router.patch(
+  "/:orderID",
+  authenticationUser,
+  isOwnerOrStaff(async (req) => {
+    const order = await OrderModel.findById(req.params.orderID).select("user");
+    return order?.user;
+  }),
+  updateOrder,
+);
+
+router.delete("/:orderID", authenticationUser, deleteOrder);
+
+router.get("/:orderID", getOrderByID);
 
 export default router;

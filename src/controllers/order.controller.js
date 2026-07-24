@@ -7,6 +7,7 @@ import {
   dbDeleteOrder,
   dbDeleteAllOrdersbyUserID,
   dbGetOrdersbyID,
+  dbCreateOrderWithStock,
 } from "../services/order.services.js";
 
 const getOrders = async (req, res) => {
@@ -77,7 +78,9 @@ const getOrderByID = async (req, res) => {
 const createOrder = async (req, res) => {
   try {
     const inputData = req.body;
-    const order = await dbCreateOrder(inputData);
+    inputData.user = req.payload._id;
+    
+    const order = await dbCreateOrderWithStock(inputData);
 
     res.status(201).json({
       msg: "Orden creada exitosamente",
@@ -85,6 +88,13 @@ const createOrder = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
+    if (error.code === "INSUFFICIENT_STOCK") {
+      return res.status(409).json({
+        msg: "No hay stock suficiente para completar la orden",
+        product: error.productId,
+      });
+    }
+
     res.status(500).json({ msg: "Error al crear la orden" });
   }
 };

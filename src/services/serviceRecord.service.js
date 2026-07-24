@@ -1,5 +1,6 @@
 import AppointmentModel from "../models/appointment.model.js";
 import ServiceRecordModel from "../models/ServiceRecord.model.js";
+import { decrementStockForItems } from "./product.service.js";
 
 
 const dbGetServiceRecords = async () => {
@@ -53,6 +54,28 @@ const dbUpdateServiceRecord = async (id, updateData) => {
 
 const dbDeleteServiceRecord = async (id) => {
   return await ServiceRecordModel.findByIdAndDelete(id);
+};
+
+const dbCreateServiceRecordWithStock = async (data) => {
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    if (data.usedProducts?.length) {
+      await decrementStockForItems(data.usedProducts, session);
+    }
+
+    const [record] = await ServiceRecordModel.create([data], { session });
+
+    await session.commitTransaction();
+    return record;
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    session.endSession();
+  }
 };
 
 export {

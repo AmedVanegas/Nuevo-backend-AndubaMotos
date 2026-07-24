@@ -9,7 +9,7 @@ const dbGetMotorcycleById = async (motorcycleId) => {
   return await MotorcycleModel.findOne({ _id: motorcycleId });
 };
 const dbGetMotorcycles = async () => {
-  return await MotorcycleModel.find();
+  return await MotorcycleModel.find().populate({path:'client', select:'username'})
 };
 
 const dbDeleteMotorcycle = async (motorcycleId) => {

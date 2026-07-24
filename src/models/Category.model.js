@@ -12,6 +12,7 @@ const CategorySchema = new Schema(
     registerignUserId: {
       type: Schema.Types.ObjectId,
       ref: "users",
+      required:true
     },
   },
   {

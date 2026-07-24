@@ -31,7 +31,7 @@ const UserSchema = new Schema(
     password: {
       type: String,
       required: true,
-      minLenght: true
+      minLength: 8
     },
     rol: {
       type: String,
@@ -70,7 +70,7 @@ const UserSchema = new Schema(
  createdBy:{
       type:Schema.Types.ObjectId,
       ref:'users',
-      required:false
+      required:true
     },
    
   },

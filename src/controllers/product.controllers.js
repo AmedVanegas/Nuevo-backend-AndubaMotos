@@ -101,9 +101,7 @@ const createProduct = async (req, res) => {
   try {
     const inputData = req.body;
 
-    // const {_id} = req.user
-
-    // inputData.createdBy = _id
+    inputData.createdBy = req.payload._id
 
     // obtiene los datos enviados en la peticion
 

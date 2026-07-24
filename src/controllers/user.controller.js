@@ -125,6 +125,8 @@ async function createUsers(req, res) {
 
     inputData.password = password;
 
+    inputData.createdBy = req.payload._id
+
     const createdUser = await insertUser(inputData); //registra el usuario y guarda los datos en la variable
 
     res.status(201).json({

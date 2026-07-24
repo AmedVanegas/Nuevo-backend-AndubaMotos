@@ -101,6 +101,8 @@ async function createMc(req, res) {
   try {
     const inputData = req.body;
 
+    inputData.registeringUserId = req.payload._id
+
     const data = await registerMotorcycle(inputData);
 
     res.status(201).json({

@@ -9,6 +9,7 @@ const createdShoppingcar = async (req, res) => {
 
     try {
         const inputData = req.body
+        inputData.user = req.payload._id;
         console.log('inputData', inputData);
         const createdShoppingcar = await dbinsertShoppingcar(inputData)
 

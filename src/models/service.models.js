@@ -21,6 +21,11 @@ const serviceSchema = new Schema(
       trim: true,
       minlength: 7,
       maxlength: 500, 
+    },
+    registeringUserId:{
+      type: Schema.Types.ObjectId,
+      ref:"users",
+      required:true
     }
     
   },

@@ -6,7 +6,7 @@ const insertUser = async (newUser) => {
 };
 
 const dbGetUsers = async () => {
-  return await Usermodel.find();
+  return await Usermodel.find().select("-password")
 };
 
 const dbGetUsersbyId = async (userID) => {

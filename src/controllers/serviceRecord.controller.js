@@ -124,6 +124,7 @@ const getServiceRecordByAppointment = async (req, res) => {
 const createServiceRecord = async (req, res) => {
   try {
     const inputData = req.body;
+    inputData.mechanic = req.payload._id; 
     const record = await dbCreateServiceRecord(inputData);
 
     res.status(201).json({

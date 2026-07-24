@@ -32,6 +32,7 @@ const MotorcycleSchema = new Schema(
     registeringUserId: {
       type: Schema.Types.ObjectId,
       ref: "users",
+      required:true
     },
     status: {
       type: Boolean,
