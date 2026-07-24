@@ -9,7 +9,7 @@ const CategorySchema = new Schema(
       required: true,
     },
     description: String,
-    registerignUserId: {
+    registeringUserId: {
       type: Schema.Types.ObjectId,
       ref: "users",
       required:true
