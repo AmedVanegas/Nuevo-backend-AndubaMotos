@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
+import { ROLES } from "../config/global.config.js";
 import {
   dbGetOrders,
   dbGetOrdersbyUserID,
   dbCreateOrder,
-  dbUpdateOrders,
-  dbDeleteOrder,
+  dbUpdateOrderWithStock,
+  dbDeleteOrderWithStock,
   dbDeleteAllOrdersbyUserID,
   dbGetOrdersbyID,
   dbCreateOrderWithStock,
@@ -12,7 +13,11 @@ import {
 
 const getOrders = async (req, res) => {
   try {
-    const data = await dbGetOrders();
+    const STAFF = [ROLES.OWNER, ROLES.ADMIN, ROLES.EMPLOYEE];
+    const isStaff = req.payload && STAFF.includes(req.payload.rol);
+    const userFilter = isStaff ? undefined : req.payload?._id;
+
+    const data = await dbGetOrders(userFilter);
     res.json({
       msg: "Órdenes obtenidas",
       data: data,
@@ -108,7 +113,7 @@ const updateOrder = async (req, res) => {
       return res.status(400).json({ msg: "ID de orden inválido" });
     }
 
-    const data = await dbUpdateOrders(orderID, inputData);
+    const data = await dbUpdateOrderWithStock(orderID, inputData);
 
     if (!data) {
       return res.status(404).json({ msg: "Orden no encontrada" });
@@ -132,7 +137,7 @@ const deleteOrder = async (req, res) => {
       return res.status(400).json({ msg: "ID de orden inválido" });
     }
 
-    const data = await dbDeleteOrder(orderID);
+    const data = await dbDeleteOrderWithStock(orderID);
 
     if (!data) {
       return res.status(404).json({ msg: "Orden no encontrada" });

@@ -125,7 +125,12 @@ async function createUsers(req, res) {
 
     inputData.password = password;
 
-    inputData.createdBy = req.payload._id
+    // req.payload solo existe si un usuario autenticado (admin/owner) esta
+    // creando la cuenta. En el auto-registro publico (/api/auth/register)
+    // no hay usuario autenticado, por lo que no se debe asumir req.payload._id.
+    if (req.payload?._id) {
+      inputData.createdBy = req.payload._id;
+    }
 
     const createdUser = await insertUser(inputData); //registra el usuario y guarda los datos en la variable
 

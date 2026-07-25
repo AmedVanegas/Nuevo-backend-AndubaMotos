@@ -15,7 +15,9 @@ import { authorizationUser } from "../middlewares/authorization.middleware.js";
 
 const router = Router();
 
-router.get("/", authenticationUser,getHistories);
+const STAFF = [ROLES.OWNER, ROLES.ADMIN, ROLES.EMPLOYEE];
+
+router.get("/", authenticationUser, authorizationUser(STAFF), getHistories);
 
 router.get(
   "/:userID",

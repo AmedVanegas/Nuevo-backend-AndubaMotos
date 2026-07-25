@@ -3,6 +3,13 @@ import ProductModel from "../models/Product.model.js";
 import mongoose from "mongoose";
 
 const registerProduct = async (newProduct) => {
+  if (
+    Object.prototype.hasOwnProperty.call(newProduct, "stock") &&
+    newProduct.stock <= 0 &&
+    !Object.prototype.hasOwnProperty.call(newProduct, "status")
+  ) {
+    newProduct.status = "agotado";
+  }
   return await ProductModel.create(newProduct);
 };
 
@@ -19,16 +26,37 @@ const dbDeleteProduct = async (productId) => {
 };
 
 const dbUpdateProduct = async (productId, updateData) => {
+  // Si se esta actualizando el stock manualmente y no se especifico un status
+  // explicito en la misma peticion, sincronizamos el status automaticamente:
+  // stock <= 0 -> "agotado"; stock > 0 y estaba "agotado" -> vuelve a "disponible".
+  if (
+    Object.prototype.hasOwnProperty.call(updateData, "stock") &&
+    !Object.prototype.hasOwnProperty.call(updateData, "status")
+  ) {
+    const current = await ProductModel.findById(productId);
+    if (!current) return null;
+
+    if (updateData.stock <= 0) {
+      updateData.status = "agotado";
+    } else if (current.status === "agotado") {
+      updateData.status = "disponible";
+    }
+  }
+
   return await ProductModel.findByIdAndUpdate(productId, updateData, {
     returnDocument: "after",
+    runValidators: true,
   });
 };
 const decrementStockForItems = async (items, session) => {
   for (const item of items) {
     const updatedProduct = await ProductModel.findOneAndUpdate(
       { _id: item.product, stock: { $gte: item.quantity } },
-      { $inc: { stock: -item.quantity } },
-      { new: true, session },
+      [
+        { $set: { stock: { $subtract: ["$stock", item.quantity] } } },
+        { $set: { status: { $cond: [{ $lte: ["$stock", 0] }, "agotado", "$status"] } } },
+      ],
+      { new: true, session, updatePipeline: true }
     );
 
     if (!updatedProduct) {
@@ -37,6 +65,10 @@ const decrementStockForItems = async (items, session) => {
       error.productId = item.product;
       throw error;
     }
+
+    // Nunca confiar en el precio enviado por el cliente: se sobrescribe
+    // con el precio real del producto en la base de datos.
+    item.unitPrice = updatedProduct.price;
   }
 };
 
@@ -45,19 +77,28 @@ const restoreStockForItems = async (items, session) => {
   for (const item of items) {
     await ProductModel.findByIdAndUpdate(
       item.product,
-      { $inc: { stock: item.quantity } },
-      { session },
+      [
+        { $set: { stock: { $add: ["$stock", item.quantity] } } },
+        {
+          $set: {
+            status: {
+              $cond: [
+                { $and: [{ $eq: ["$status", "agotado"] }, { $gt: ["$stock", 0] }] },
+                "disponible",
+                "$status",
+              ],
+            },
+          },
+        },
+      ],
+      { session, updatePipeline: true },
     );
   }
 };
 
 export {
-  // ... tus exports que ya tienes
   decrementStockForItems,
   restoreStockForItems,
-};
-
-export {
   registerProduct,
   dbGetProducts,
   dbDeleteProduct,

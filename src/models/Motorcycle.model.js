@@ -13,7 +13,7 @@ const MotorcycleSchema = new Schema(
     brand: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
     modelName: {
       type: String,

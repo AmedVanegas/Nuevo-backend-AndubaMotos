@@ -67,13 +67,13 @@ const loginUser = async (req, res) => {
       error.message.includes("Contraseña incorrecta") ||
       error.message.includes("El usuario no existe")
     ) {
-      res.status(400).json({
+      return res.status(400).json({
         msg: error.message,
       });
     }
 
     if (error.message.includes("No se pudo generar el token de acceso")) {
-      res.status(500).json({
+      return res.status(500).json({
         msg: error.message,
       });
     }

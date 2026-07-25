@@ -2,6 +2,7 @@
 
 import mongoose from "mongoose";
 import AppointmentModel from "../models/appointment.model.js";
+import { ROLES } from "../config/global.config.js";
 import {
   dbGetAppointment,
   insertAppointment,
@@ -47,7 +48,11 @@ const createAppointment = async (req, res) => {
 
 const getAppointment = async (req, res) => {
   try {
-    const data = await dbGetAppointment();
+    const STAFF = [ROLES.OWNER, ROLES.ADMIN, ROLES.EMPLOYEE];
+    const isStaff = req.payload && STAFF.includes(req.payload.rol);
+    const clientFilter = isStaff ? undefined : req.payload?._id;
+
+    const data = await dbGetAppointment(clientFilter);
 
     res.json({
       msg: "Obtener todas las citas",

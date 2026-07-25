@@ -88,7 +88,7 @@ async function patchMc(req, res) {
     }
 
     if (error.message.includes("La motocicleta no se encuentra registrada"))
-      res.status(500).json({
+      return res.status(404).json({
         msg: error.message,
       });
 

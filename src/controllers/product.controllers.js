@@ -50,13 +50,13 @@ const pacthProducts = async (req, res) => {
     console.log(error);
 
     if (error.name === "CastError") {
-      res.status(400).json({
+      return res.status(400).json({
         msg: "Ingrese un Id valido",
       });
     }
 
     if (error.message.includes("El producto solicitado no existe")) {
-      res.status(400).json({
+      return res.status(400).json({
         msg: error.message,
       });
     }
@@ -72,7 +72,7 @@ const getProductById = async (req, res) => {
     const productId = req.params.productId;
 
     if (!mongoose.Types.ObjectId.isValid(productId)) {
-      res.status(500).json({
+      return res.status(400).json({
         msg: "Ingrese un Id valido",
       });
     }
@@ -80,7 +80,7 @@ const getProductById = async (req, res) => {
     const product = await dbGetProductbyId(productId);
 
     if (!product) {
-      res.status(500).json({
+      return res.status(404).json({
         msg: "El producto no existe",
       });
     }
@@ -143,7 +143,7 @@ const deleteProducts = async (req, res) => {
     const productId = req.params.productId;
 
     if (!mongoose.Types.ObjectId.isValid(productId)) {
-      res.status(500).json({
+      return res.status(400).json({
         msg: "Ingrese un Id valido",
       });
     }
@@ -151,7 +151,7 @@ const deleteProducts = async (req, res) => {
     const deletedProduct = await dbDeleteProduct(productId);
 
     if (!deletedProduct) {
-      res.status(500).json({
+      return res.status(404).json({
         msg: "El producto que intenta eliminar no existe",
       });
     }

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { ROLES } from "../config/global.config.js";
 
 
 
@@ -38,7 +39,11 @@ const createdShoppingcar = async (req, res) => {
 const getShoppingcar = async (req, res) => {
 
     try {
-        const data = await dbGetShoppingcar();
+        const STAFF = [ROLES.OWNER, ROLES.ADMIN, ROLES.EMPLOYEE];
+        const isStaff = req.payload && STAFF.includes(req.payload.rol);
+        const userFilter = isStaff ? undefined : req.payload?._id;
+
+        const data = await dbGetShoppingcar(userFilter);
 
         if (!data || data.length === 0) {
       return res.status(400).json({
@@ -100,13 +105,13 @@ const deleteShoppingcar = async (req, res) => {
     try {
         const id = req.params.idshoppingcar
 
-        const data = await dbdeleteShoppingcar(id);
-
         if (!mongoose.Types.ObjectId.isValid(id)) {
               return res.status(400).json({
                 msg: 'no se puede eliminar porque el ID proporcionado es invalido'
               });
           };
+
+        const data = await dbdeleteShoppingcar(id);
 
             res.status(200).json({
             msg: "eliminar producto",

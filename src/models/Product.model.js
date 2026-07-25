@@ -28,11 +28,11 @@ const productSchema = new Schema(
     stock: {
       type: Number,
       default: 1,
-      min: 1,
+      min: 0,
     },
     status: {
       type: String,
-      enum: ["disponible", "no disponible", "refactorizado", "pendiente"],
+      enum: ["disponible", "no disponible", "agotado", "refactorizado", "pendiente"],
       default: "disponible",
       required:true
     },

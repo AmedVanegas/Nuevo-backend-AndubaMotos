@@ -15,7 +15,6 @@ const dbGetUsersbyId = async (userID) => {
 
 const dbDeleteuser = async (userID) => {
   return await Usermodel.findByIdAndDelete(userID);
-  return await Usermodel.findOneAndDelete({ _id: userID });
 };
 
 const dbUpdateUser = async (userID, updateData) => {

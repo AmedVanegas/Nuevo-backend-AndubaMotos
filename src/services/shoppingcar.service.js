@@ -4,8 +4,9 @@ const  dbinsertShoppingcar = async(newService) => {
    return await shoppingcarmodel.create(newService); 
 }
 
-const dbGetShoppingcar = async ( ) => {
-     return await shoppingcarmodel.find();
+const dbGetShoppingcar = async (userId) => {
+     const filter = userId ? { user: userId } : {};
+     return await shoppingcarmodel.find(filter);
 
  }
 

@@ -1,10 +1,11 @@
 import OrderModel from "../models/Order.model.js";
 import mongoose from "mongoose";
-import { decrementStockForItems } from "./product.service.js";
+import { decrementStockForItems, restoreStockForItems } from "./product.service.js";
 
 
-const dbGetOrders = async () => {
-  return await OrderModel.find();
+const dbGetOrders = async (userId) => {
+  const filter = userId ? { user: userId } : {};
+  return await OrderModel.find(filter);
 };
 
 const dbGetOrdersbyUserID = async (userID) => {
@@ -23,6 +24,69 @@ const dbUpdateOrders = async (orderID, updateData) => {
   return await OrderModel.findByIdAndUpdate(orderID, updateData, { new: true });
 };
 
+// Al cancelar o eliminar una orden se devuelve el stock descontado al crearla.
+// Se evita restaurar dos veces: si la orden ya estaba "canceled" (el stock ya
+// se devolvio en ese momento), no se vuelve a restaurar al eliminarla despues.
+const dbUpdateOrderWithStock = async (orderID, updateData) => {
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+
+    const existingOrder = await OrderModel.findById(orderID).session(session);
+    if (!existingOrder) {
+      await session.abortTransaction();
+      return null;
+    }
+
+    const isCancelling =
+      updateData.status === "canceled" && existingOrder.status !== "canceled";
+
+    const updatedOrder = await OrderModel.findByIdAndUpdate(orderID, updateData, {
+      new: true,
+      session,
+    });
+
+    if (isCancelling) {
+      await restoreStockForItems(updatedOrder.products, session);
+    }
+
+    await session.commitTransaction();
+    return updatedOrder;
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    session.endSession();
+  }
+};
+
+const dbDeleteOrderWithStock = async (orderID) => {
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+
+    const existingOrder = await OrderModel.findById(orderID).session(session);
+    if (!existingOrder) {
+      await session.abortTransaction();
+      return null;
+    }
+
+    if (existingOrder.status !== "canceled") {
+      await restoreStockForItems(existingOrder.products, session);
+    }
+
+    const deletedOrder = await OrderModel.findByIdAndDelete(orderID, { session });
+
+    await session.commitTransaction();
+    return deletedOrder;
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    session.endSession();
+  }
+};
+
 const dbCreateOrder = async (data) => {
   return await OrderModel.create(data);
 };
@@ -37,6 +101,11 @@ const dbCreateOrderWithStock = async (newOrder) => {
     session.startTransaction();
 
     await decrementStockForItems(newOrder.products, session);
+
+    newOrder.total = newOrder.products.reduce(
+      (sum, item) => sum + item.unitPrice * item.quantity,
+      0,
+    );
 
     const [order] = await OrderModel.create([newOrder], { session });
 
@@ -57,6 +126,8 @@ export {
   dbDeleteAllOrdersbyUserID,
   dbDeleteOrder,
   dbUpdateOrders,
+  dbUpdateOrderWithStock,
+  dbDeleteOrderWithStock,
   dbGetOrdersbyID,
   dbCreateOrderWithStock
 };

@@ -14,7 +14,6 @@ const  dbinsertService = async(newService) => {
 
  const dbdeleteservice = async (id) => {
     return await servicemodel.findOneAndDelete({_id: id})
-    return await servicemodel.findByIdAndDelete({_id: id})
  }
 
  const dbpatchservice = async (id, inputData)=> {

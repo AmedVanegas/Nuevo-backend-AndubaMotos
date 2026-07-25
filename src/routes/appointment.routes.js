@@ -15,7 +15,7 @@ import AppointmentModel from "../models/appointment.model.js"
 const router = Router();
 
 
-router.get("/", getAppointment);
+router.get("/", authenticationUser, getAppointment);
 router.get("/:id", authenticationUser, getAppointmentByID);
 router.post(
   "/",

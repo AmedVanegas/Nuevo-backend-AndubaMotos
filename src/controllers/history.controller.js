@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 import { dbgetHistorybyId, dbGetHistories,dbDeleteHistory,dbCreateHistory, dbUpdateHistory} from "../services/history.services.js";
+import { ROLES } from "../config/global.config.js";
+
+const STAFF = [ROLES.OWNER, ROLES.ADMIN, ROLES.EMPLOYEE];
 
 const getHistorybyUserId = async (req, res) => {
   try {
@@ -42,6 +45,13 @@ const getHistories = async (req, res) => {
 const createHistory = async (req, res) => {
   try {
     const inputData = req.body;
+
+    // Un cliente solo puede crear el historial de si mismo; solo el staff
+    // puede indicar explicitamente un "user" distinto en el body.
+    if (!STAFF.includes(req.payload?.rol)) {
+      inputData.user = req.payload._id;
+    }
+
     const history = await dbCreateHistory(inputData);
 
     res.status(201).json({

@@ -4,8 +4,9 @@ const insertAppointment = async (newAppointment) => {
   return await AppointmentModel.create(newAppointment);
 };
 
-const dbGetAppointment = async () => {
-  return await AppointmentModel.find().populate([
+const dbGetAppointment = async (clientId) => {
+  const filter = clientId ? { client: clientId } : {};
+  return await AppointmentModel.find(filter).populate([
     { path: "client", select: "username phoneNumber" },
     { path: "motorcycle", select: "licensePlate brand" },
     { path: "registeringUserId", select: "username phoneNumber" },
