@@ -139,6 +139,12 @@ const createReview = async (req, res) => {
       });
     }
 
+    if (error.code === 11000) {
+      return res.status(409).json({
+        msg: "Ya dejaste una review para este producto",
+      });
+    }
+
     res.status(500).json({
       msg: "No se pudo crear la review",
     });

@@ -11,7 +11,30 @@ const dbGetHistories = async () => {
 };
 
 const dbUpdateHistory = async (id, updateData) => {
-  return await HistoryModel.findOneAndUpdate({ user: id }, updateData, {
+ 
+  const update = {};
+
+  if (Array.isArray(updateData.products) && updateData.products.length > 0) {
+    update.$addToSet = {
+      ...(update.$addToSet || {}),
+      products: { $each: updateData.products },
+    };
+  }
+
+  if (Array.isArray(updateData.services) && updateData.services.length > 0) {
+    update.$addToSet = {
+      ...(update.$addToSet || {}),
+      services: { $each: updateData.services },
+    };
+  }
+
+  if (Object.keys(update).length === 0) {
+    // No mandaron products/services (o mandaron arrays vacios): no hay nada
+    // que acumular, simplemente devolvemos el historial actual.
+    return await HistoryModel.findOne({ user: id });
+  }
+
+  return await HistoryModel.findOneAndUpdate({ user: id }, update, {
     returnDocument: "after",
     upsert: true,
   });

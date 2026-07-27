@@ -24,9 +24,7 @@ const dbUpdateOrders = async (orderID, updateData) => {
   return await OrderModel.findByIdAndUpdate(orderID, updateData, { new: true });
 };
 
-// Al cancelar o eliminar una orden se devuelve el stock descontado al crearla.
-// Se evita restaurar dos veces: si la orden ya estaba "canceled" (el stock ya
-// se devolvio en ese momento), no se vuelve a restaurar al eliminarla despues.
+
 const dbUpdateOrderWithStock = async (orderID, updateData) => {
   const session = await mongoose.startSession();
   try {

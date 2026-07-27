@@ -32,4 +32,9 @@ const ReviewSchema = new Schema(
 
 const ReviewModel = model("reviews", ReviewSchema);
 
+// Refuerza a nivel de base de datos la regla de "una sola review por usuario
+// por producto" (antes solo se validaba en el controlador, lo que puede
+// fallar si llegan dos peticiones al mismo tiempo).
+ReviewSchema.index({ product: 1, user: 1 }, { unique: true });
+
 export default ReviewModel;

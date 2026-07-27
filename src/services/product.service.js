@@ -26,20 +26,20 @@ const dbDeleteProduct = async (productId) => {
 };
 
 const dbUpdateProduct = async (productId, updateData) => {
-  // Si se esta actualizando el stock manualmente y no se especifico un status
-  // explicito en la misma peticion, sincronizamos el status automaticamente:
-  // stock <= 0 -> "agotado"; stock > 0 y estaba "agotado" -> vuelve a "disponible".
-  if (
-    Object.prototype.hasOwnProperty.call(updateData, "stock") &&
-    !Object.prototype.hasOwnProperty.call(updateData, "status")
-  ) {
+  if (Object.prototype.hasOwnProperty.call(updateData, "stock")) {
     const current = await ProductModel.findById(productId);
     if (!current) return null;
 
-    if (updateData.stock <= 0) {
-      updateData.status = "agotado";
-    } else if (current.status === "agotado") {
-      updateData.status = "disponible";
+    const statusNoFueModificadoManualmente =
+      !Object.prototype.hasOwnProperty.call(updateData, "status") ||
+      updateData.status === current.status;
+
+    if (statusNoFueModificadoManualmente) {
+      if (updateData.stock <= 0) {
+        updateData.status = "agotado";
+      } else if (current.status === "agotado") {
+        updateData.status = "disponible";
+      }
     }
   }
 
@@ -48,6 +48,7 @@ const dbUpdateProduct = async (productId, updateData) => {
     runValidators: true,
   });
 };
+
 const decrementStockForItems = async (items, session) => {
   for (const item of items) {
     const updatedProduct = await ProductModel.findOneAndUpdate(
