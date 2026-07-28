@@ -25,6 +25,10 @@ const productSchema = new Schema(
       default: 0,
       min: 0,
     },
+    roi:{
+      type:Number,
+      default:0.3
+    },
     stock: {
       type: Number,
       default: 1,
