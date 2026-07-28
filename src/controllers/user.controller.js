@@ -40,7 +40,6 @@ async function getUsersbyId(req, res) {
     }
 
     let user = await dbGetUsersbyId(userID);
-    
 
     if (!user) {
       return res.status(400).json({
@@ -48,10 +47,8 @@ async function getUsersbyId(req, res) {
       });
     }
 
-    user = user.toObject()
-    delete user.password
-
-   
+    user = user.toObject();
+    delete user.password;
 
     res.json({
       msg: "Usuario",
@@ -138,7 +135,9 @@ async function createUsers(req, res) {
       createdUser: createdUser, //muestra el objeto JSON en la propiedad de inputData
     });
   } catch (error) {
-    console.error(error); //respuesta consola
+    console.log("Nombre del error:", error.name);
+    console.log("Código del error:", error.code);
+    console.log(error.message); //respuesta consola
 
     if (error.code === 11000) {
       const repeatedValue = Object.entries(error.keyValue);
@@ -146,6 +145,21 @@ async function createUsers(req, res) {
       return res.status(400).json({
         msg: "Ingrese un usuario sin repetir lo siguientes datos:",
         repeatedValue: repeatedValue,
+      });
+    }
+    if (error.name === "ValidationError") {
+      const mensajes = Object.values(error.errors)
+        .map((err) => err.message)
+        .join(", ");
+
+      return res.status(400).json({
+        msg: mensajes,
+      });
+    }
+
+    if (error.name == "MongooseError") {
+      return res.status(400).json({
+        msg: error.message, //respuesta al cliente
       });
     }
 

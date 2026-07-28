@@ -5,11 +5,29 @@ import { ALLOWED_ROLES, ROLES } from "../config/global.config.js";
 
 const UserSchema = new Schema(
   {
+    firstName:{
+      type:String,
+      required:[true, 'El nombre es obligatorio'],
+      maxlength:50
+    },
+    middleName:{
+      type:String,
+      maxlength:50
+    },
+    lastName:{
+      type: String,
+      maxlength:50,
+      required:true
+    },
+    secondLastName:{
+      type:String,
+      maxlength:50
+    },
     username: {
       type: String,
       required: [true, 'El nombre es obligatorio'],
       trim: true,
-      unique:true
+      unique:[true, 'El nombre de usuario debe ser unico']
     },
     document: {
       type: String,
@@ -61,6 +79,15 @@ const UserSchema = new Schema(
     },
     birthDate: {
       type: Date,
+      required:true,
+      max: [
+      function() {
+        const fecha = new Date();
+        fecha.setFullYear(fecha.getFullYear() - 18);
+        return fecha;
+      }, 
+      'El usuario debe tener al menos 18 años.'
+    ]
     },
     status:{
         enum:['active','inactive','banned'],
