@@ -5,7 +5,12 @@ const registerMotorcycle = async (newMotorcycle) => {
 };
 
 const dbGetMotorcycleById = async (motorcycleId) => {
-  return await MotorcycleModel.findOne({ _id: motorcycleId });
+  // Se popula el cliente (igual que en dbGetMotorcycles) para que el
+  // formulario de edición pueda mostrar el nombre del dueño, no solo su id
+  return await MotorcycleModel.findOne({ _id: motorcycleId }).populate({
+    path: "client",
+    select: "username",
+  });
 };
 const dbGetMotorcycles = async () => {
   return await MotorcycleModel.find().populate({path:'client', select:'username'})
@@ -21,10 +26,17 @@ const dbUpdateMotorcycle = async (motorcycleId, updateData) => {
   });
 };
 
+const dbGetMotorcycleByUserId = async (userId)=>{
+
+  return await MotorcycleModel.find({client:userId})
+
+}
+
 export {
   registerMotorcycle,
   dbGetMotorcycles,
   dbDeleteMotorcycle,
   dbUpdateMotorcycle,
   dbGetMotorcycleById,
+  dbGetMotorcycleByUserId
 };

@@ -28,9 +28,7 @@ dbConnection();
 
 app.use(express.json());  // habilita la lectura de los formatos json
 
-app.use(cors({
-    origin: 'http://localhost:4200'
-}))
+app.use(cors())
 
 app.get("/health", function(req,res){
 

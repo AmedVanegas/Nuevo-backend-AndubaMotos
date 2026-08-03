@@ -6,6 +6,7 @@ import {
   createMc,
   deleteMc,
   getMcById,
+  getMcByUserId,
 } from "../controllers/motorcycle.controller.js";
 import authenticationUser from "../middlewares/authentication.middleware.js";
 import { ROLES } from "../config/global.config.js";
@@ -20,6 +21,8 @@ router.get("/", getMc);
 router.patch("/:motorcycleId", authenticationUser,authorizationUser(STAFF), patchMc);
 
 router.get("/:motorcycleId", authenticationUser, getMcById);
+
+router.get('/user/:userId', authenticationUser, getMcByUserId)
 
 router.post("/", authenticationUser,authorizationUser(STAFF), createMc);
 

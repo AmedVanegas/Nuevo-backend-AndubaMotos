@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import {
   dbDeleteMotorcycle,
   dbGetMotorcycleById,
+  dbGetMotorcycleByUserId,
   dbGetMotorcycles,
   dbUpdateMotorcycle,
   registerMotorcycle,
@@ -101,7 +102,7 @@ async function createMc(req, res) {
   try {
     const inputData = req.body;
 
-    inputData.registeringUserId = req.payload._id
+    inputData.registeringUserId = req.payload._id;
 
     const data = await registerMotorcycle(inputData);
 
@@ -112,20 +113,15 @@ async function createMc(req, res) {
   } catch (error) {
     console.log(error);
 
-    if (error.code === 11000){
-
-      const repeatedValue = Object.entries(error.keyValue)
+    if (error.code === 11000) {
+      const repeatedValue = Object.entries(error.keyValue);
 
       return res.status(400).json({
-        msg:"Ingrese un objeto sin propiedades repetidas",
+        msg: "Ingrese un objeto sin propiedades repetidas",
         repeated: repeatedValue,
-        error: error.errors
-
-
-      })
+        error: error.errors,
+      });
     }
-
-    
 
     res.status(501).json({
       msg: "no se pudo registrar la moto",
@@ -165,5 +161,34 @@ async function deleteMc(req, res) {
     });
   }
 }
+async function getMcByUserId(req, res) {
+  try {
+    const userId = req.params.userId;
 
-export { getMc, patchMc, createMc, deleteMc, getMcById };
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({
+        msg: "Ingrese un id valido",
+      });
+    }
+
+    const motorcycles = await dbGetMotorcycleByUserId(userId);
+
+    if (!motorcycles) {
+      return res.status(400).json({
+        msg: "El usuario no tiene motos registradas",
+      });
+    }
+
+    res.json({
+      msg: "motos",
+      motorcycles,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      msg: "No se pudo traer la motocicleta",
+    });
+  }
+}
+
+export { getMc, patchMc, createMc, deleteMc, getMcById, getMcByUserId};

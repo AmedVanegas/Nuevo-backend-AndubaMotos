@@ -121,7 +121,7 @@ const renewToken = async (req, res, next) => {
   res.json({
     msg: "Token renovado",
     token,
-    data:userFoundObj
+    data: userFoundObj,
   });
 };
 export { loginUser, renewToken };

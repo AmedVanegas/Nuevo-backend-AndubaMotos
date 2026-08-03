@@ -30,6 +30,29 @@ const dbGetUserbyUsername = async (username) => {
   return await Usermodel.findOne({ username: username, status:'active' },);
 };
 
+// Busqueda tipo "typeahead": trae solo unos pocos usuarios que calzan con
+// el termino (username, nombre o apellido), en vez de traer todos los
+// usuarios como hacia el front antes. Solo usuarios activos.
+const dbSearchUsers = async (term = "", rol, limit = 10) => {
+  const filter = { status: "active" };
+
+  if (rol) {
+    filter.rol = rol;
+  }
+
+  if (term) {
+    // Escapa caracteres especiales de regex para que el termino se busque
+    // literalmente y no rompa la consulta (ej. si alguien busca "a.b").
+    const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(escapedTerm, "i");
+    filter.$or = [{ username: regex }, { firstName: regex }, { lastName: regex }];
+  }
+
+  return await Usermodel.find(filter)
+    .select("-password")
+    .limit(Number(limit) || 10);
+};
+
 export {
   insertUser,
   dbGetUsers,
@@ -37,5 +60,6 @@ export {
   dbUpdateUser,
   dbGetUsersbyId,
   dbGetUserbyUsername,
+  dbSearchUsers,
 };
 

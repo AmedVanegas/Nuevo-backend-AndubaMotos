@@ -5,6 +5,7 @@ import {
   dbGetUsersbyId,
   dbUpdateUser,
   insertUser,
+  dbSearchUsers,
 } from "../services/user.service.js";
 import { encryptedPassword } from "../helpers/bcrypt.helper.js";
 
@@ -58,6 +59,31 @@ async function getUsersbyId(req, res) {
     console.log(error);
     res.status(500).json({
       msg: "No se pudo obtener el usuario",
+    });
+  }
+}
+async function searchUsers(req, res) {
+  try {
+    const { q = "", rol, limit } = req.query;
+
+    // Con menos de 2 caracteres no vale la pena consultar la base de datos
+    if (!q || q.trim().length < 2) {
+      return res.json({
+        msg: "Resultados de búsqueda",
+        data: [],
+      });
+    }
+
+    const data = await dbSearchUsers(q.trim(), rol, limit);
+
+    res.json({
+      msg: "Resultados de búsqueda",
+      data: data,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      msg: "No se pudo buscar usuarios",
     });
   }
 }
@@ -198,4 +224,4 @@ async function deleteUsers(req, res) {
   }
 }
 
-export { getUsers, createUsers, deleteUsers, patchUsers, getUsersbyId };
+export { getUsers, createUsers, deleteUsers, patchUsers, getUsersbyId, searchUsers };
