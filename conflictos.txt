@@ -1,0 +1,40 @@
+diff --cc .env.example
+index 9c78cd4,9c455d1..0000000
+--- a/.env.example
++++ b/.env.example
+diff --cc package-lock.json
+index eab1cda,c6b759e..0000000
+--- a/package-lock.json
++++ b/package-lock.json
+diff --cc package.json
+index 150e39c,27cc92c..0000000
+--- a/package.json
++++ b/package.json
+diff --cc src/controllers/product.controllers.js
+index 3c04010,df3fb72..0000000
+--- a/src/controllers/product.controllers.js
++++ b/src/controllers/product.controllers.js
+diff --cc src/controllers/services.controller.js
+index b1a26be,d6e5c23..0000000
+--- a/src/controllers/services.controller.js
++++ b/src/controllers/services.controller.js
+diff --cc src/index.js
+index 68ace35,1baa8f9..0000000
+--- a/src/index.js
++++ b/src/index.js
+diff --cc src/models/service.models.js
+index 46ed8a0,aabdb18..0000000
+--- a/src/models/service.models.js
++++ b/src/models/service.models.js
+diff --cc src/routes/product.routes.js
+index 7bde162,3a7b58b..0000000
+--- a/src/routes/product.routes.js
++++ b/src/routes/product.routes.js
+diff --cc src/routes/service.routes.js
+index e95a9f1,44bd051..0000000
+--- a/src/routes/service.routes.js
++++ b/src/routes/service.routes.js
+diff --cc src/services/motorcycle.services.js
+index dbffea9,1946df8..0000000
+--- a/src/services/motorcycle.services.js
++++ b/src/services/motorcycle.services.js
