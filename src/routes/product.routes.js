@@ -19,8 +19,8 @@ const STAFF = [ROLES.OWNER, ROLES.ADMIN, ROLES.EMPLOYEE]
 // definir rutas para productos
 router.get("/", getProducts);
 router.get('/:productId', getProductById)
-router.patch("/:productId", authenticationUser, authorizationUser(STAFF), upload.single("image"), pacthProducts);
-router.post("/", authenticationUser, authorizationUser(STAFF), upload.single("image"), createProduct);
+router.patch("/:productId", authenticationUser, authorizationUser(STAFF), upload.array("images", 6), pacthProducts);
+router.post("/", authenticationUser, authorizationUser(STAFF), upload.array("images", 6), createProduct);
 router.delete("/:productId", authenticationUser, authorizationUser(STAFF), deleteProducts);
 
 export default router;
