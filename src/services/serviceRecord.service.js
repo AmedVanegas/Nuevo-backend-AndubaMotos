@@ -1,5 +1,6 @@
 import AppointmentModel from "../models/appointment.model.js";
 import ServiceRecordModel from "../models/ServiceRecord.model.js";
+import { dbPushServiceToHistory } from "./history.services.js";
 import { decrementStockForItems } from "./product.service.js";
 
 
@@ -43,7 +44,12 @@ const dbGetServiceRecordByAppointment = async (appointmentID) => {
 
 
 const dbCreateServiceRecord = async (data) => {
-  return await ServiceRecordModel.create(data);
+  const record = await ServiceRecordModel.create(data);
+  const appointment = await AppointmentModel.findById(record.appointment);
+  if (appointment) {
+    await dbPushServiceToHistory(appointment.client, record._id);
+  }
+  return record;
 };
 
 

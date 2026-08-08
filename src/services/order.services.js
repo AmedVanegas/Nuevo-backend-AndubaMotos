@@ -1,7 +1,10 @@
 import OrderModel from "../models/Order.model.js";
 import mongoose from "mongoose";
-import { decrementStockForItems, restoreStockForItems } from "./product.service.js";
-
+import {
+  decrementStockForItems,
+  restoreStockForItems,
+} from "./product.service.js";
+import { dbPushOrderToHistory } from "./history.services.js";
 
 const dbGetOrders = async (userId) => {
   const filter = userId ? { user: userId } : {};
@@ -24,7 +27,6 @@ const dbUpdateOrders = async (orderID, updateData) => {
   return await OrderModel.findByIdAndUpdate(orderID, updateData, { new: true });
 };
 
-
 const dbUpdateOrderWithStock = async (orderID, updateData) => {
   const session = await mongoose.startSession();
   try {
@@ -39,10 +41,14 @@ const dbUpdateOrderWithStock = async (orderID, updateData) => {
     const isCancelling =
       updateData.status === "canceled" && existingOrder.status !== "canceled";
 
-    const updatedOrder = await OrderModel.findByIdAndUpdate(orderID, updateData, {
-      new: true,
-      session,
-    });
+    const updatedOrder = await OrderModel.findByIdAndUpdate(
+      orderID,
+      updateData,
+      {
+        new: true,
+        session,
+      },
+    );
 
     if (isCancelling) {
       await restoreStockForItems(updatedOrder.products, session);
@@ -73,7 +79,9 @@ const dbDeleteOrderWithStock = async (orderID) => {
       await restoreStockForItems(existingOrder.products, session);
     }
 
-    const deletedOrder = await OrderModel.findByIdAndDelete(orderID, { session });
+    const deletedOrder = await OrderModel.findByIdAndDelete(orderID, {
+      session,
+    });
 
     await session.commitTransaction();
     return deletedOrder;
@@ -106,6 +114,7 @@ const dbCreateOrderWithStock = async (newOrder) => {
     );
 
     const [order] = await OrderModel.create([newOrder], { session });
+    await dbPushOrderToHistory(newOrder.user, order._id, session);
 
     await session.commitTransaction();
     return order;
@@ -127,5 +136,5 @@ export {
   dbUpdateOrderWithStock,
   dbDeleteOrderWithStock,
   dbGetOrdersbyID,
-  dbCreateOrderWithStock
+  dbCreateOrderWithStock,
 };

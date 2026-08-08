@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import shoppingcarmodel from "../models/shoppingcar.models.js";
 import OrderModel from "../models/Order.model.js";
 import { dbGetProductbyId, decrementStockForItems } from "./product.service.js";
+import { dbPushOrderToHistory } from "./history.services.js";
 
 const CART_POPULATE_FIELDS = "name price productImages stock status";
 
@@ -177,6 +178,7 @@ const dbCheckoutCart = async (userId, extraData = {}) => {
       ],
       { session },
     );
+    await dbPushOrderToHistory(userId, order._id, session);
 
     await shoppingcarmodel.findOneAndDelete({ user: userId }, { session });
 

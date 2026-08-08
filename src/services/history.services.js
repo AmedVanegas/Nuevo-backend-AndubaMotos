@@ -44,6 +44,14 @@ const dbDeleteHistory = async (userID) => {
   return await HistoryModel.findOneAndDelete({ user: userID });
 };
 
+const dbPushOrderToHistory = async (userId, orderId, session) => {
+  return await dbUpdateHistory(userId, { products: [orderId] }, session);
+};
+
+const dbPushServiceToHistory = async (userId, serviceRecordId, session) => {
+  return await dbUpdateHistory(userId, { services: [serviceRecordId] }, session);
+};
+
 const dbCreateHistory = async (history) => {
   return await HistoryModel.create(history);
 };
@@ -54,4 +62,6 @@ export {
   dbDeleteHistory,
   dbUpdateHistory,
   dbGetHistories,
+  dbPushOrderToHistory,
+  dbPushServiceToHistory
 };
