@@ -1,57 +1,44 @@
 import { Router } from "express";
 
 import {
-  createdShoppingcar,
-  getShoppingcar,
-  patchShoppingcar,
-  deleteShoppingcar,
-  getShoppingcarByid,
+  getMyCart,
+  addItemToCart,
+  updateCartItem,
+  removeCartItem,
+  clearCart,
+  getCartByUserId,
+  getAllCarts,
+  checkoutCart,
 } from "../controllers/shoppingcar.controller.js";
 import authenticationUser from "../middlewares/authentication.middleware.js";
-import { isOwnerOrStaff } from "../middlewares/ownership.middleware.js";
-import shoppingcarmodel from "../models/shoppingcar.models.js";
+import { authorizationUser } from "../middlewares/authorization.middleware.js";
+import { ROLES } from "../config/global.config.js";
+
+const STAFF = [ROLES.OWNER, ROLES.ADMIN, ROLES.EMPLOYEE];
 
 const router = Router();
 
-//Definicion rutas
+// Carrito del usuario autenticado (no requiere id: solo existe un carrito por persona)
+router.get("/", authenticationUser, getMyCart);
+router.delete("/", authenticationUser, clearCart);
 
-router.post("/", authenticationUser, createdShoppingcar);
-router.get("/", authenticationUser, getShoppingcar); 
+// Items del carrito
+router.post("/items", authenticationUser, addItemToCart);
+router.patch("/items/:productId", authenticationUser, updateCartItem);
+router.delete("/items/:productId", authenticationUser, removeCartItem);
 
-router.patch(
-  "/:idshoppingcar",
-  authenticationUser,
-  isOwnerOrStaff(async (req) => {
-    const cart = await shoppingcarmodel
-      .findById(req.params.idshoppingcar)
-      .select("user");
-    return cart?.user;
-  }),
-  patchShoppingcar,
-);
+// Punto 6: convierte el carrito en una orden y lo borra (todo o nada)
+router.post("/checkout", authenticationUser, checkoutCart);
 
-router.delete(
-  "/:idshoppingcar",
-  authenticationUser,
-  isOwnerOrStaff(async (req) => {
-    const cart = await shoppingcarmodel
-      .findById(req.params.idshoppingcar)
-      .select("user");
-    return cart?.user;
-  }),
-  deleteShoppingcar,
-);
+// Solo staff: ver todos los carritos existentes
+router.get("/all", authenticationUser, authorizationUser(STAFF), getAllCarts);
 
+// Solo staff: ver el carrito de un usuario puntual (soporte/administración)
 router.get(
-  "/:idshoppingcar",
+  "/user/:userID",
   authenticationUser,
-  isOwnerOrStaff(async (req) => {
-    const cart = await shoppingcarmodel
-      .findById(req.params.idshoppingcar)
-      .select("user");
-    return cart?.user;
-  }),
-  getShoppingcarByid,
+  authorizationUser(STAFF),
+  getCartByUserId,
 );
 
 export default router;

@@ -1,158 +1,211 @@
-import mongoose from "mongoose";
-import { ROLES } from "../config/global.config.js";
+import {
+  dbGetCartByUser,
+  dbAddItemToCart,
+  dbUpdateCartItemQuantity,
+  dbRemoveCartItem,
+  dbClearCart,
+  dbGetAllCarts,
+  dbCheckoutCart,
+} from "../services/shoppingcar.service.js";
 
+const getMyCart = async (req, res) => {
+  try {
+    const cart = await dbGetCartByUser(req.payload._id);
 
-
-import{dbinsertShoppingcar, dbGetShoppingcar, dbdeleteShoppingcar, dbpatchShoppingcar, dbGetShoppingcarByid} from "../services/shoppingcar.service.js"
-
-
-const createdShoppingcar = async (req, res) => {
-
-    try {
-        const inputData = req.body
-        inputData.user = req.payload._id;
-        console.log('inputData', inputData);
-        const createdShoppingcar = await dbinsertShoppingcar(inputData)
-
-        if (!createdShoppingcar) {
-          return res.status(400).json({
-          msg: "no hay productos dentro del carrito",
-         });
-     }
-
-        res.status(201).json({
-         createdShoppingcar
-
-        })
-
-
-    } catch (error) {
-        console.error(error)
-        res.status(500).json({
-            msg: "no se pudo crear  la compraaa"
-        });
-
-    };
-}
-
-
-const getShoppingcar = async (req, res) => {
-
-    try {
-        const STAFF = [ROLES.OWNER, ROLES.ADMIN, ROLES.EMPLOYEE];
-        const isStaff = req.payload && STAFF.includes(req.payload.rol);
-        const userFilter = isStaff ? undefined : req.payload?._id;
-
-        const data = await dbGetShoppingcar(userFilter);
-
-        if (!data || data.length === 0) {
-      return res.status(400).json({
-        msg: "no hay productos dentro del carrito",
+    if (!cart) {
+      return res.json({
+        msg: "El carrito esta vacio",
+        data: { products: [], price: 0 },
       });
     }
 
-        res.json({
-            msg: "obtener todas las compras",
-            data: data
-        })
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            msg: 'Error: no se pudo obtener el listado de la compra'
-        });
+    res.json({
+      msg: "Carrito obtenido",
+      data: cart,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "No se pudo obtener el carrito" });
+  }
+};
 
-    };
-}
+const addItemToCart = async (req, res) => {
+  try {
+    const { product, quantity } = req.body;
 
-
-
-const patchShoppingcar = async (req, res) => {
-
-    try {
-         const id = req.params.idshoppingcar       // id de la ruta para encontrar el documento que quiero actualizar
-         const inputData = req.body                // obteniendo el objeto con el/los parametros que quiero actualizar
-
-          if (Object.keys(inputData).length === 0) {
-            return res.status(400).json({
-            msg: "Debe enviar al menos un campo para actualizar",
-          });
-}
-
-        const data = await dbpatchShoppingcar(id, inputData)   //el objeto con las propiedades y los valores que deseamos actualizar
-
-
-        if (!data) {                                                                                // creo una excepcion (falsa)
-            throw new Error('no se pudo actualizar el producto porque no se encuentra agregado al carrito') // yo creo un error(y crea una excepcion)
-        }
-
-        res.status(200).json({
-            msg: "se actualizo el producto",
-            data: data
-        })
-
-    } catch (error) {
-        console.error(error)
-        res.status(500).json({
-            msg: 'no se pudo actualizar el producto'
-        })
+    if (!product || !quantity || quantity < 1) {
+      return res.status(400).json({
+        msg: "Debe indicar product y quantity (mayor a 0)",
+      });
     }
-}
 
+    const cart = await dbAddItemToCart(req.payload._id, product, quantity);
 
+    res.status(201).json({
+      msg: "Producto agregado al carrito",
+      data: cart,
+    });
+  } catch (error) {
+    console.error(error);
 
-const deleteShoppingcar = async (req, res) => {
-
-    try {
-        const id = req.params.idshoppingcar
-
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-              return res.status(400).json({
-                msg: 'no se puede eliminar porque el ID proporcionado es invalido'
-              });
-          };
-
-        const data = await dbdeleteShoppingcar(id);
-
-            res.status(200).json({
-            msg: "eliminar producto",
-            data: data
-        });
-    } catch (error) {
-        console.error(error)
-        res.status(500).json({
-            msg: 'error: no se pudo eliminar el producto'
-        })
+    if (error.code === "PRODUCT_NOT_FOUND") {
+      return res.status(404).json({ msg: "El producto no existe" });
     }
-}
-
-
-
-const getShoppingcarByid = async (req, res) => {
-
-    try {
-        const id = req.params.idshoppingcar       // id de la ruta para encontrar el documento que quiero actualizar
-
-        const data = await dbGetShoppingcarByid(id)   //el objeto con las propiedades y los valores que deseamos actualizar.
-
-            if (!data) {
-                return res.json({
-                    msg: 'no se puede obtener el producto porque el ID  es invalido carrito'
-                })
-            }
-
-        res.status(200).json({
-            msg: "Shopping carts",
-            data: data
-        })
-    } catch (error) {
-        console.error(error)
-
-        res.status(500).json({
-            msg: 'error: no se pudo obtener el producto'
-        })
-
+    if (error.code === "INSUFFICIENT_STOCK") {
+      return res.status(409).json({
+        msg: `Solo hay ${error.availableStock} unidades disponibles`,
+        product: error.productId,
+        availableStock: error.availableStock,
+      });
     }
-}
 
+    res.status(500).json({ msg: "No se pudo agregar el producto al carrito" });
+  }
+};
 
-export{createdShoppingcar, getShoppingcar, patchShoppingcar, deleteShoppingcar, getShoppingcarByid}
+const updateCartItem = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const { quantity } = req.body;
+
+    if (!quantity || quantity < 1) {
+      return res.status(400).json({ msg: "quantity debe ser mayor a 0" });
+    }
+
+    const cart = await dbUpdateCartItemQuantity(
+      req.payload._id,
+      productId,
+      quantity,
+    );
+
+    res.json({
+      msg: "Cantidad actualizada",
+      data: cart,
+    });
+  } catch (error) {
+    console.error(error);
+
+    if (error.code === "PRODUCT_NOT_FOUND") {
+      return res.status(404).json({ msg: "El producto no existe" });
+    }
+    if (error.code === "CART_NOT_FOUND" || error.code === "ITEM_NOT_FOUND") {
+      return res.status(404).json({ msg: "El producto no esta en tu carrito" });
+    }
+    if (error.code === "INSUFFICIENT_STOCK") {
+      return res.status(409).json({
+        msg: `Solo hay ${error.availableStock} unidades disponibles`,
+        product: error.productId,
+        availableStock: error.availableStock,
+      });
+    }
+
+    res.status(500).json({ msg: "No se pudo actualizar el producto" });
+  }
+};
+
+const removeCartItem = async (req, res) => {
+  try {
+    const { productId } = req.params;
+
+    const cart = await dbRemoveCartItem(req.payload._id, productId);
+
+    res.json({
+      msg: "Producto eliminado del carrito",
+      data: cart,
+    });
+  } catch (error) {
+    console.error(error);
+
+    if (error.code === "CART_NOT_FOUND") {
+      return res.status(404).json({ msg: "No tienes un carrito activo" });
+    }
+
+    res.status(500).json({ msg: "No se pudo eliminar el producto" });
+  }
+};
+
+const clearCart = async (req, res) => {
+  try {
+    await dbClearCart(req.payload._id);
+
+    res.json({ msg: "Carrito vaciado" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "No se pudo vaciar el carrito" });
+  }
+};
+
+const getCartByUserId = async (req, res) => {
+  try {
+    const { userID } = req.params;
+
+    const cart = await dbGetCartByUser(userID);
+
+    if (!cart) {
+      return res.json({ msg: "Este usuario no tiene carrito", data: null });
+    }
+
+    res.json({
+      msg: "Carrito obtenido",
+      data: cart,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "No se pudo obtener el carrito" });
+  }
+};
+
+const getAllCarts = async (req, res) => {
+  try {
+    const carts = await dbGetAllCarts();
+
+    res.json({
+      msg: "Carritos obtenidos",
+      data: carts,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "No se pudieron obtener los carritos" });
+  }
+};
+
+const checkoutCart = async (req, res) => {
+  try {
+    const { direccionEnvio, metodoPago } = req.body;
+
+    const order = await dbCheckoutCart(req.payload._id, {
+      direccionEnvio,
+      metodoPago,
+    });
+
+    res.status(201).json({
+      msg: "Orden creada a partir del carrito",
+      data: order,
+    });
+  } catch (error) {
+    console.error(error);
+
+    if (error.code === "EMPTY_CART") {
+      return res.status(400).json({ msg: "El carrito esta vacio" });
+    }
+    if (error.code === "INSUFFICIENT_STOCK") {
+      return res.status(409).json({
+        msg: "No hay stock suficiente para completar la compra",
+        product: error.productId,
+      });
+    }
+
+    res.status(500).json({ msg: "No se pudo completar la compra" });
+  }
+};
+
+export {
+  getMyCart,
+  addItemToCart,
+  updateCartItem,
+  removeCartItem,
+  clearCart,
+  getCartByUserId,
+  getAllCarts,
+  checkoutCart,
+};

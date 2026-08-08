@@ -6,7 +6,7 @@ const shoppingcarSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "users",
       required: true,
-      index: true,
+      unique: true, // un solo carrito por usuario
     },
 
     products: [
@@ -42,25 +42,6 @@ const shoppingcarSchema = new Schema(
       trim: true,
       minlength: 7,
       maxlength: 500,
-      default: "",
-    },
-
-    status: {
-      type: String,
-      enum: [
-        "activo",
-        "procesando",
-        "pagado",
-        "enviado",
-        "entregado",
-        "cancelado",
-      ],
-      default: "activo",
-    },
-
-    active: {
-      type: Boolean,
-      default: true,
     },
   },
   {

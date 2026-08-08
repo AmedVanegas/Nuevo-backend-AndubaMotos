@@ -68,8 +68,8 @@ const decrementStockForItems = async (items, session) => {
     }
 
     // Nunca confiar en el precio enviado por el cliente: se sobrescribe
-    // con el precio real del producto en la base de datos.
-    item.unitPrice = updatedProduct.price;
+    // con el precio real del producto en la base de datos (precio base + ROI).
+    item.unitPrice = updatedProduct.price * (1 + updatedProduct.roi);
   }
 };
 

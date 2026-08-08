@@ -9,6 +9,49 @@ import {
   registerProduct,
 } from "../services/product.service.js";
 
+// const getProducts = async (req, res) => {
+//   try {
+//     const products = await dbGetProducts();
+
+//     if (!products || products.length === 0) {
+//       return res.status(400).json({
+//         msg: "No hay productos registrados",
+//       });
+//     }
+//     const serverUrl = `${req.protocol}://${req.get("host")}`;
+//     // Armamos la URL completa AL VUELO sin afectar la base de datos
+//     const fixedProducts = products.map((prod) => {
+//       // Necesitamos convertir el documento de mongoose a objeto de JS normal
+//       const p = prod.toObject ? prod.toObject() : prod;
+
+//       if (p.productImages && p.productImages.length > 0) {
+//         p.productImages = p.productImages.map((img) => {
+//           // ESTO ARREGLA TUS PRODUCTOS VIEJOS: si guardaste localhost, se lo quitamos y le ponemos la IP correcta
+//           if (img.includes("localhost")) {
+//             const filename = img.split("/uploads/")[1];
+//             return `${serverUrl}/uploads/${filename}`;
+//           }
+//           // Y esto es para los nuevos que ya se guardan bien
+//           if (img.startsWith("http")) return img;
+//           const path = img.startsWith("/") ? img : `/${img}`;
+//           return `${serverUrl}${path}`;
+//         });
+//       }
+//       return p;
+//     });
+
+//     res.json({
+//       msg: "Lista de productos",
+//       data: fixedProducts,
+//     });
+//   } catch (error) {
+//     console.log(error);
+
+//     res.status(500).json({
+//       msg: "No se pudo obtener los productos",
+//     });
+//   }
+// };
 const getProducts = async (req, res) => {
   try {
     const products = await dbGetProducts();
@@ -18,31 +61,10 @@ const getProducts = async (req, res) => {
         msg: "No hay productos registrados",
       });
     }
-    const serverUrl = `${req.protocol}://${req.get("host")}`;
-    // Armamos la URL completa AL VUELO sin afectar la base de datos
-    const fixedProducts = products.map((prod) => {
-      // Necesitamos convertir el documento de mongoose a objeto de JS normal
-      const p = prod.toObject ? prod.toObject() : prod;
-
-      if (p.productImages && p.productImages.length > 0) {
-        p.productImages = p.productImages.map((img) => {
-          // ESTO ARREGLA TUS PRODUCTOS VIEJOS: si guardaste localhost, se lo quitamos y le ponemos la IP correcta
-          if (img.includes("localhost")) {
-            const filename = img.split("/uploads/")[1];
-            return `${serverUrl}/uploads/${filename}`;
-          }
-          // Y esto es para los nuevos que ya se guardan bien
-          if (img.startsWith("http")) return img;
-          const path = img.startsWith("/") ? img : `/${img}`;
-          return `${serverUrl}${path}`;
-        });
-      }
-      return p;
-    });
 
     res.json({
       msg: "Lista de productos",
-      data: fixedProducts,
+      data: products,
     });
   } catch (error) {
     console.log(error);
@@ -144,6 +166,56 @@ const pacthProducts = async (req, res) => {
   }
 };
 
+// const getProductById = async (req, res) => {
+
+//   try {
+//     const productId = req.params.productId;
+
+//     if (!mongoose.Types.ObjectId.isValid(productId)) {
+//       return res.status(400).json({
+//         msg: "Ingrese un Id valido",
+//       });
+//     }
+
+//     const product = await dbGetProductbyId(productId);
+
+//     if (!product) {
+//       return res.status(404).json({
+//         msg: "El producto no existe",
+//       });
+//     }
+//     const serverUrl = `${req.protocol}://${req.get("host")}`;
+
+//     // Convertimos el documento de Mongo a un objeto JavaScript normal
+//     const p = product.toObject ? product.toObject() : product;
+//     if (p.productImages && p.productImages.length > 0) {
+//       p.productImages = p.productImages.map((img) => {
+//         // Si tiene localhost quemado (de tus pruebas anteriores), lo arreglamos
+//         if (img.includes("localhost")) {
+//           const filename = img.split("/uploads/")[1];
+//           return `${serverUrl}/uploads/${filename}`;
+//         }
+//         // Si ya es un link completo válido, no lo tocamos
+//         if (img.startsWith("http")) return img;
+
+//         // Si es una ruta relativa (como se deben guardar ahora), le pegamos el servidor
+//         const path = img.startsWith("/") ? img : `/${img}`;
+//         return `${serverUrl}${path}`;
+//       });
+//     }
+
+//     res.json({
+//       msg: "Producto",
+//       product: p,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({
+//       msg: "No se pudo traer el producto",
+//     });
+//   }
+// };
+
 const getProductById = async (req, res) => {
   try {
     const productId = req.params.productId;
@@ -161,29 +233,10 @@ const getProductById = async (req, res) => {
         msg: "El producto no existe",
       });
     }
-    const serverUrl = `${req.protocol}://${req.get("host")}`;
-
-    // Convertimos el documento de Mongo a un objeto JavaScript normal
-    const p = product.toObject ? product.toObject() : product;
-    if (p.productImages && p.productImages.length > 0) {
-      p.productImages = p.productImages.map((img) => {
-        // Si tiene localhost quemado (de tus pruebas anteriores), lo arreglamos
-        if (img.includes("localhost")) {
-          const filename = img.split("/uploads/")[1];
-          return `${serverUrl}/uploads/${filename}`;
-        }
-        // Si ya es un link completo válido, no lo tocamos
-        if (img.startsWith("http")) return img;
-
-        // Si es una ruta relativa (como se deben guardar ahora), le pegamos el servidor
-        const path = img.startsWith("/") ? img : `/${img}`;
-        return `${serverUrl}${path}`;
-      });
-    }
 
     res.json({
       msg: "Producto",
-      product: p,
+      product: product,
     });
   } catch (error) {
     console.log(error);
@@ -192,7 +245,6 @@ const getProductById = async (req, res) => {
     });
   }
 };
-
 const createProduct = async (req, res) => {
   try {
     const inputData = req.body;
