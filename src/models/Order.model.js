@@ -16,6 +16,9 @@ const orderItemSchema = new Schema(
       type: Number,
       required: true,
     },
+    unitCost: {
+      type: Number,
+    },
   },
   {
     _id: false
