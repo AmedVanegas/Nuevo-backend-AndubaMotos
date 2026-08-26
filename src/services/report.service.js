@@ -73,36 +73,75 @@ const getOrdersBreakdown = async () => {
             },
           },
         ],
-        topProducts: [
+        // Antes era "top 5 más vendidos" (solo unidades e ingresos).
+        // Ahora es el detalle completo por producto: cada producto que se
+        // haya vendido al menos una vez, con su costo total, ventas
+        // totales, ganancia y % de ganancia — mismo criterio de unitCost
+        // congelado (con respaldo al price actual) que el resto del panel.
+        productBreakdown: [
           { $match: { status: { $in: CONFIRMED_ORDER_STATUSES } } },
           { $unwind: "$products" },
           {
+            $lookup: {
+              from: "products",
+              localField: "products.product",
+              foreignField: "_id",
+              as: "productInfo",
+            },
+          },
+          { $unwind: { path: "$productInfo", preserveNullAndEmptyArrays: true } },
+          {
+            $addFields: {
+              lineUnitCost: {
+                $ifNull: ["$products.unitCost", { $ifNull: ["$productInfo.price", 0] }],
+              },
+            },
+          },
+          {
             $group: {
               _id: "$products.product",
+              name: { $first: "$productInfo.name" },
               unitsSold: { $sum: "$products.quantity" },
               revenue: {
                 $sum: { $multiply: ["$products.quantity", "$products.unitPrice"] },
               },
+              cost: {
+                $sum: { $multiply: ["$products.quantity", "$lineUnitCost"] },
+              },
+            },
+          },
+          {
+            $addFields: {
+              profit: { $subtract: ["$revenue", "$cost"] },
+              // % de ganancia sobre el costo (mismo criterio que "roi" en
+              // todo el resto del panel). Si por alguna razón el costo
+              // queda en 0 (producto eliminado, sin price), no se puede
+              // sacar un % real — se devuelve null en vez de dividir por 0.
+              profitPercentage: {
+                $cond: [
+                  { $gt: ["$cost", 0] },
+                  {
+                    $multiply: [
+                      { $divide: [{ $subtract: ["$revenue", "$cost"] }, "$cost"] },
+                      100,
+                    ],
+                  },
+                  null,
+                ],
+              },
             },
           },
           { $sort: { unitsSold: -1 } },
-          { $limit: 5 },
-          {
-            $lookup: {
-              from: "products",
-              localField: "_id",
-              foreignField: "_id",
-              as: "product",
-            },
-          },
-          { $unwind: "$product" },
           {
             $project: {
               _id: 0,
               productId: "$_id",
-              name: "$product.name",
+              name: 1,
               unitsSold: 1,
               revenue: 1,
+              cost: 1,
+              profit: 1,
+              profitPercentage: 1,
             },
           },
         ],
@@ -127,7 +166,7 @@ const getOrdersBreakdown = async () => {
       ordersCount: confirmed.ordersCount,
     },
     pending,
-    topProducts: result.topProducts,
+    productBreakdown: result.productBreakdown,
   };
 };
 
@@ -196,7 +235,7 @@ const dbGetSalesSummary = async () => {
     pendingOrdersCount: orders.pending.pendingOrdersCount,
     products: orders.products,
     services,
-    topProducts: orders.topProducts,
+    productBreakdown: orders.productBreakdown,
   };
 };
 

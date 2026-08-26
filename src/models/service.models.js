@@ -30,6 +30,11 @@ const serviceSchema = new Schema(
     serviceImage: {
       type: String,
       default: 'https://images.unsplash.com/photo-1621252179027-94459d278660?q=80&w=2070&auto=format&fit=crop', // Imagen por defecto de servicio
+    },
+    estimatedTime:{
+      type:Number,
+      required:true
+      
     }
     
   },

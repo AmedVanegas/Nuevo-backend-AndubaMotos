@@ -13,7 +13,7 @@ const AppointmentSchema = new Schema(
 
     schedule: {
       type: Date,
-      required: [true, "La fecha de la cita es obligatoria"],
+      required: [true, "La fecha de la cita es obligatoria"],//campos de tiempo
     },
     service: {
       type: Schema.Types.ObjectId,
