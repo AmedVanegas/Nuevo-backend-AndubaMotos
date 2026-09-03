@@ -1,6 +1,11 @@
 import { validatePassword } from "../helpers/bcrypt.helper.js";
 import { generateToken } from "../helpers/jwt.helper.js";
 import { dbGetUserbyUsername } from "../services/user.service.js";
+import crypto from 'crypto';
+import bcrypt from 'bcrypt';
+import User from '../models/User.model.js'
+import sendResetCodeEmail from "../helpers/mailer.js";
+
 
 const loginUser = async (req, res) => {
   try {
@@ -124,4 +129,70 @@ const renewToken = async (req, res, next) => {
     data: userFoundObj,
   });
 };
-export { loginUser, renewToken };
+
+const requestPasswordReset = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(200).json({ message: 'Si el correo existe, se envió un código.' });
+    }
+
+    const code = crypto.randomInt(1000, 10000).toString(); // 4 dígitos
+    user.resetPasswordCode = code;
+    user.resetPasswordExpires = Date.now() + 10 * 60 * 1000; // 10 min
+    await user.save();
+
+    await sendResetCodeEmail(user.email, code);
+
+    return res.status(200).json({ message: 'Si el correo existe, se envió un código.' });
+  } catch (error) {
+    return res.status(500).json({ message: 'Error al procesar la solicitud', error: error.message });
+  }
+};
+
+// PASO 2: verificar código
+ const verifyResetCode = async (req, res) => {
+  try {
+    const { email, code } = req.body;
+    const user = await User.findOne({
+      email,
+      resetPasswordCode: code,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Código inválido o expirado' });
+    }
+
+    return res.status(200).json({ message: 'Código válido' });
+  } catch (error) {
+    return res.status(500).json({ message: 'Error al verificar el código', error: error.message });
+  }
+};
+
+// PASO 3: cambiar contraseña
+const resetPassword = async (req, res) => {
+  try {
+    const { email, code, newPassword } = req.body;
+    const user = await User.findOne({
+      email,
+      resetPasswordCode: code,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Código inválido o expirado' });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    user.resetPasswordCode = null;
+    user.resetPasswordExpires = null;
+    await user.save();
+
+    return res.status(200).json({ message: 'Contraseña actualizada correctamente' });
+  } catch (error) {
+    return res.status(500).json({ message: 'Error al actualizar la contraseña', error: error.message });
+  }}
+export { loginUser, renewToken, resetPassword, verifyResetCode, requestPasswordReset  };

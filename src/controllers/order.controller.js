@@ -83,8 +83,17 @@ const getOrderByID = async (req, res) => {
 const createOrder = async (req, res) => {
   try {
     const inputData = req.body;
-    inputData.user = req.payload._id;
-    
+
+    // Antes esto SIEMPRE pisaba el user con el del token, así que un
+    // admin/owner/employee no podía crear una orden a nombre de un
+    // cliente real -- el campo "Cliente" del form quedaba inerte.
+    // Ahora: si quien hace la petición es staff Y mandó un user, se
+    // respeta ese user. Un cliente normal (o si no mandó user) sigue
+    // forzado a su propio id, igual que antes.
+    const STAFF = [ROLES.OWNER, ROLES.ADMIN, ROLES.EMPLOYEE];
+    const isStaff = STAFF.includes(req.payload.rol);
+    inputData.user = isStaff && inputData.user ? inputData.user : req.payload._id;
+
     const order = await dbCreateOrderWithStock(inputData);
 
     res.status(201).json({

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { createUsers } from "../controllers/user.controller.js";
-import { loginUser, renewToken } from "../controllers/auth.controller.js";
+import { loginUser, renewToken, requestPasswordReset, resetPassword, verifyResetCode } from "../controllers/auth.controller.js";
 import authenticationUser from "../middlewares/authentication.middleware.js";
 import { removeRole } from "../middlewares/without-rol.middleware.js";
 
@@ -18,17 +18,9 @@ router.post('/register', removeRole ,createUsers) // /api/auth/register
 
 router.get('/renew-token', authenticationUser ,renewToken)
 
-// /remember-password
-
-// /remember-user
-
-// /renew-token
-
-// /activate-account
-
-// /deactivate-account
-
-// /double-athuentication
+router.post('/forgot-password', requestPasswordReset);
+router.post('/verify-reset-code', verifyResetCode);
+router.post('/reset-password', resetPassword);
 
 
 

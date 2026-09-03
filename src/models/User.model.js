@@ -5,35 +5,35 @@ import { ALLOWED_ROLES, ROLES } from "../config/global.config.js";
 
 const UserSchema = new Schema(
   {
-    firstName:{
-      type:String,
-      required:[true, 'El nombre es obligatorio'],
-      maxlength:50
-    },
-    middleName:{
-      type:String,
-      maxlength:50
-    },
-    lastName:{
+    firstName: {
       type: String,
-      maxlength:50,
-      required:true
+      required: [true, "El nombre es obligatorio"],
+      maxlength: 50,
     },
-    secondLastName:{
-      type:String,
-      maxlength:50
+    middleName: {
+      type: String,
+      maxlength: 50,
+    },
+    lastName: {
+      type: String,
+      maxlength: 50,
+      required: true,
+    },
+    secondLastName: {
+      type: String,
+      maxlength: 50,
     },
     username: {
       type: String,
-      required: [true, 'El nombre es obligatorio'],
+      required: [true, "El nombre es obligatorio"],
       trim: true,
-      unique:[true, 'El nombre de usuario debe ser unico']
+      unique: [true, "El nombre de usuario debe ser unico"],
     },
     document: {
       type: String,
       required: true,
       maxlength: 16,
-      unique:true
+      unique: true,
     },
     phoneNumber: {
       type: String,
@@ -44,12 +44,12 @@ const UserSchema = new Schema(
       type: String,
       unique: true,
       required: true,
-      unique:true
+      unique: true,
     },
     password: {
       type: String,
       required: true,
-      minLength: 8
+      minLength: 8,
     },
     rol: {
       type: String,
@@ -67,7 +67,7 @@ const UserSchema = new Schema(
       },
       neighborhood: {
         type: String,
-        required:true
+        required: true,
       },
       city: {
         type: String,
@@ -77,40 +77,39 @@ const UserSchema = new Schema(
         type: String,
         required: true,
       },
-      country:{
-        type:String,
-        required:true
-      }
+      country: {
+        type: String,
+        required: true,
+      },
     },
     birthDate: {
       type: Date,
-      required:true,
+      required: true,
       max: [
-      function() {
-        const fecha = new Date();
-        fecha.setFullYear(fecha.getFullYear() - 18);
-        return fecha;
-      }, 
-      'El usuario debe tener al menos 18 años.'
-    ]
+        function () {
+          const fecha = new Date();
+          fecha.setFullYear(fecha.getFullYear() - 18);
+          return fecha;
+        },
+        "El usuario debe tener al menos 18 años.",
+      ],
     },
-    status:{
-        enum:['active','inactive','banned'],
-        type:String,
-        default:'active'
+    status: {
+      enum: ["active", "inactive", "banned"],
+      type: String,
+      default: "active",
     },
- createdBy:{
-      type:Schema.Types.ObjectId,
-      ref:'users',
-      required:false
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: "users",
+      required: false,
     },
-   
+    resetPasswordCode: { type: String, default: null },
+    resetPasswordExpires: { type: Date, default: null },
   },
   {
-    versionKey:false,
-    timestamps:true
-    
-    
+    versionKey: false,
+    timestamps: true,
   },
 );
 

@@ -5,7 +5,7 @@ import {
   dbGetServiceRecordsByUserID,
   dbGetServiceRecordsByMechanic,
   dbGetServiceRecordByAppointment,
-  dbCreateServiceRecord,
+  dbCreateServiceRecordWithStock,
   dbUpdateServiceRecord,
   dbDeleteServiceRecord,
 } from "../services/serviceRecord.service.js";
@@ -125,7 +125,7 @@ const createServiceRecord = async (req, res) => {
   try {
     const inputData = req.body;
     inputData.mechanic = req.payload._id; 
-    const record = await dbCreateServiceRecord(inputData);
+    const record = await dbCreateServiceRecordWithStock(inputData);
 
     res.status(201).json({
       msg: "Registro de servicio creado exitosamente",
@@ -133,6 +133,12 @@ const createServiceRecord = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
+    if (error.code === "INSUFFICIENT_STOCK") {
+      return res.status(409).json({
+        msg: "No hay stock suficiente para completar el registro",
+        product: error.productId,
+      });
+    }
     res.status(500).json({ msg: "Error al crear el registro de servicio" });
   }
 };

@@ -8,15 +8,23 @@ import { dbPushOrderToHistory } from "./history.services.js";
 
 const dbGetOrders = async (userId) => {
   const filter = userId ? { user: userId } : {};
-  return await OrderModel.find(filter);
+  return await OrderModel.find(filter)
+    .populate("user", "username email")
+    .populate("products.product", "name")
+    .sort({ createdAt: -1 });
 };
 
 const dbGetOrdersbyUserID = async (userID) => {
-  return await OrderModel.find({ user: userID });
+  return await OrderModel.find({ user: userID })
+    .populate("user", "username email")
+    .populate("products.product", "name")
+    .sort({ createdAt: -1 });
 };
 
 const dbGetOrdersbyID = async (orderID) => {
-  return await OrderModel.findById(orderID);
+  return await OrderModel.findById(orderID)
+    .populate("user", "username email")
+    .populate("products.product", "name");
 };
 
 const dbDeleteOrder = async (orderID) => {
